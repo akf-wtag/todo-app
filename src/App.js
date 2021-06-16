@@ -1,77 +1,95 @@
-import { useState } from 'react'
-import Form from './components/Form'
-import TodoList from './components/TodoList'
-import Search from './components/Search'
-import './App.css'
+import { useState } from 'react';
+import Input from './components/Input';
+import Button from './components/Button';
+import TodoList from './components/TodoList';
+import './App.css';
 
 function App() {
-  const [incompleteList, setIncompleteList] = useState([])
-  const [completeList, setCompleteList] = useState([])
-  const [text, setText] = useState('')
-  const [editText, setEditText] = useState()
-  const [searchText, setSearchText] = useState('')
+  const [todos, setTodos] = useState([]);
+  const [name, setName] = useState('');
+  const [searchText, setSearchText] = useState('');
+
+  const nameHandler = (e) => {
+    setName(e.target.value);
+  };
+
+  const searchTodoHandler = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  let incompleteTodos = [];
+  let completeTodos = [];
+
+  todos.forEach((todo) => {
+    if (
+      searchText === '' ||
+      todo.name.toLowerCase().includes(searchText.toLowerCase())
+    ) {
+      if (!todo.checked) incompleteTodos.push(todo);
+      else completeTodos.push(todo);
+    }
+  });
+
+  let isNewTodo = 1;
+
+  const onChangeTodos = (id, name, checked) => {
+    setTodos((prevTodos) => {
+      let newTodos = [];
+      newTodos = prevTodos.map((todo) => {
+        if (todo.id === id) {
+          isNewTodo = 0;
+          if (name !== '' && todo.name !== name && todo.checked !== checked)
+            return { ...todo, name, checked };
+          else if (name !== '' && todo.name !== name) return { ...todo, name };
+          else if (todo.checked !== checked) return { ...todo, checked };
+        }
+        return todo;
+      });
+
+      if (isNewTodo && name !== '') {
+        newTodos = [...prevTodos, { id, name, checked }];
+        isNewTodo = 1;
+      }
+      return newTodos;
+    });
+
+    setName('');
+  };
 
   return (
-    <div className='container' data-test='component-app'>
-      <header>
-        <h1>To-Do App</h1>
-      </header>
-      <main>
-        <Form
-          text={text}
-          setText={setText}
-          incompleteList={incompleteList}
-          setIncompleteList={setIncompleteList}
+    <div>
+      <div>
+        <Input
+          type='text'
+          placeholder='add a too...'
+          name={name}
+          onChange={nameHandler}
         />
-        <Search
-          searchText={searchText}
-          setSearchText={setSearchText}
-          completeList={completeList}
-          incompleteList={incompleteList}
-        />
-        <TodoList
-          list={incompleteList}
-          title={'Incomplete List'}
-          completeList={completeList}
-          setCompleteList={setCompleteList}
-          incompleteList={incompleteList}
-          setIncompleteList={setIncompleteList}
-          editText={editText}
-          setEditText={setEditText}
-          searchText={searchText}
-        />
-        <TodoList
-          list={completeList}
-          title={'Complete List'}
-          completeList={completeList}
-          setCompleteList={setCompleteList}
-          incompleteList={incompleteList}
-          setIncompleteList={setIncompleteList}
-          editText={editText}
-          setEditText={setEditText}
-          searchText={searchText}
-        />
-      </main>
+        <Button name={name} onClick={onChangeTodos} btnName='Add' />
+        {todos.length > 0 ? (
+          <Input
+            type='text'
+            placeholder='search here...'
+            name={searchText}
+            onChange={searchTodoHandler}
+          />
+        ) : (
+          ''
+        )}
+      </div>
+
+      <TodoList
+        todos={incompleteTodos}
+        onChangeTodos={onChangeTodos}
+        todosTitle='Incomplete Todos'
+      />
+      <TodoList
+        todos={completeTodos}
+        onChangeTodos={onChangeTodos}
+        todosTitle='Complete Todos'
+      />
     </div>
-  )
+  );
 }
 
-export default App
-
-// const [incompleteSearchText, setIncompleteSearchText] = useState('')
-// const [completeSearchText, setCompleteSearchText] = useState('')
-
-// incompleteSearchText = { incompleteSearchText }
-// setIncompleteSearchText = { setIncompleteSearchText }
-// completeSearchText = { completeSearchText }
-// setCompleteSearchText = { setCompleteSearchText }
-
-// incompleteSearchText = { incompleteSearchText }
-// setIncompleteSearchText = { setIncompleteSearchText }
-// completeSearchText = { completeSearchText }
-// setCompleteSearchText = { setCompleteSearchText }
-
-// incompleteSearchText,
-// setIncompleteSearchText,
-// completeSearchText,
-// setCompleteSearchText,
+export default App;
