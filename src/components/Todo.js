@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Input from './Input';
-import Button from './Button';
+
+import { FaEdit, FaTrash, FaRegSave } from 'react-icons/fa';
+import { ImCancelCircle } from 'react-icons/im';
 
 const Todo = ({
   id,
@@ -27,37 +29,43 @@ const Todo = ({
             onChange={(e) => setNewName(e.target.value)}
             focus={true}
           />
-          <Button
+          <FaRegSave
             onClick={() => {
               onChangeTodos(id, newName, checked);
               onSave();
               setNewName('');
             }}
-            btnName='save'
+            className='save-icon'
           />
 
-          <Button
+          <ImCancelCircle
             onClick={() => {
               onEditCancel();
               setNewName('');
             }}
-            btnName='cancel'
+            className='cancel-icon'
           />
         </>
       ) : (
         <>
-          <p>{name}</p>
+          <p className={`${checked ? 'todo-completed' : 'todo-name'}`}>
+            {name}
+          </p>
           <Input
             type='checkbox'
             onChange={() => onChangeTodos(id, name, !checked)}
             isChecked={isChecked}
           />
-          <Button
+          <FaEdit
             onClick={() => {
               onEdit(id);
               setNewName(name);
             }}
-            btnName='edit'
+            className='edit-icon'
+          />
+          <FaTrash
+            onClick={() => onChangeTodos(id, name, checked)}
+            className='trash-icon'
           />
         </>
       )}

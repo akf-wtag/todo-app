@@ -8,6 +8,7 @@ const Input = ({ type, name, onChange, isChecked, focus, placeholder }) => {
         checked={isChecked}
         autoFocus={focus}
         placeholder={placeholder}
+        className={type}
       />
     </>
   );

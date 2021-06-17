@@ -35,13 +35,14 @@ function App() {
   const onChangeTodos = (id, name, checked) => {
     setTodos((prevTodos) => {
       let newTodos = [];
-      newTodos = prevTodos.map((todo) => {
+      newTodos = prevTodos.map((todo, index) => {
         if (todo.id === id) {
           isNewTodo = 0;
           if (name !== '' && todo.name !== name && todo.checked !== checked)
             return { ...todo, name, checked };
           else if (name !== '' && todo.name !== name) return { ...todo, name };
           else if (todo.checked !== checked) return { ...todo, checked };
+          else prevTodos.splice(index, 1);
         }
         return todo;
       });
@@ -58,7 +59,10 @@ function App() {
 
   return (
     <div>
-      <div>
+      <header>
+        <h1>To-Do app</h1>
+      </header>
+      <div className='input-container'>
         <Input
           type='text'
           placeholder='add a too...'

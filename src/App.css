@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap');
 
 body {
   background-color: #f28ab2;
@@ -6,19 +6,118 @@ body {
   font-family: 'Noto Sans TC', sans-serif;
 }
 
-.container,
-main {
-  display: grid;
-  grid-template-rows: auto;
-  justify-items: center;
+.input-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 15px;
   align-items: center;
 }
 
 header {
+  width: 500px;
+  height: 100px;
+  margin: 0 auto;
+  text-align: center;
   color: white;
-  font-size: large;
+  font-weight: bolder;
 }
 
+Input[type='text'] {
+  border: none;
+  padding: 5px 5px;
+  font-size: large;
+  border-radius: 5px;
+}
+
+*:focus {
+  outline: none;
+}
+
+button {
+  border-radius: 5px;
+  color: white;
+  border: none;
+  padding: 5px 15px 5px 15px;
+  cursor: pointer;
+  font-size: medium;
+  font-weight: 500;
+}
+
+.Add {
+  background-color: #20a729;
+}
+
+Input[type='checkbox'] {
+  cursor: pointer;
+}
+
+ul {
+  width: 800px;
+  margin: 0 auto;
+  padding: 0;
+  border-radius: 5px;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 15px;
+  background: white;
+}
+
+.todo-edit {
+  display: grid;
+  grid-template-columns: 10fr 1fr 1fr;
+  align-items: center;
+}
+
+li {
+  display: grid;
+  grid-template-columns: 20fr 1fr 1fr 1fr;
+  align-items: center;
+}
+
+.cross-icon {
+  color: red;
+  font-size: small;
+  cursor: pointer;
+  justify-self: center;
+}
+
+.save-icon {
+  justify-self: center;
+}
+
+.cancel-icon {
+  color: red;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.trash-icon {
+  color: red;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-icon,
+.save-icon {
+  color: #28a745;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.todo-completed {
+  text-decoration: line-through;
+  text-decoration-color: red;
+  text-decoration-thickness: 2px;
+}
+
+p {
+  margin-left: 15px;
+  font-size: large;
+}
+/*
 form {
   display: grid;
   grid-template-rows: auto;
@@ -40,33 +139,7 @@ form {
   align-items: center;
 }
 
-.form-input {
-  border: none;
-  padding-left: 10px;
-  font-size: large;
-}
 
-.cross {
-  color: red;
-  font-size: small;
-  cursor: pointer;
-  justify-self: center;
-}
-
-*:focus {
-  outline: none;
-}
-
-.todo-button {
-  background-color: #20a729;
-  border-radius: 5px;
-  color: white;
-  border: none;
-  padding: 5px 15px 5px 15px;
-  cursor: pointer;
-  font-size: medium;
-  font-weight: 500;
-}
 
 .search-container {
   width: 200px;
@@ -80,16 +153,13 @@ form {
   padding: 5px 10px;
 }
 
-input[type='checkbox'] {
-  cursor: pointer;
-}
+
 
 .list-title {
   width: 200px;
   text-align: center;
   margin: 0 auto;
   color: white;
-  font-weight: bolder;
   font-size: larger;
 }
 
@@ -127,11 +197,7 @@ li {
   align-items: center;
 }
 
-.todo-completed {
-  text-decoration: line-through;
-  text-decoration-color: red;
-  text-decoration-thickness: 2px;
-}
+
 .todo-name-edit {
   border: 1px solid green;
   border-radius: 3px;
@@ -150,25 +216,6 @@ li {
   margin-top: 5px;
 }
 
-.edit-icon,
-.save-icon {
-  color: #28a745;
-  cursor: pointer;
-  font-size: 16px;
-}
+.
 
-.save-icon {
-  justify-self: center;
-}
-
-.cancel-icon {
-  color: red;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.trash-icon {
-  color: red;
-  cursor: pointer;
-  font-size: 14px;
-} */
+ */
