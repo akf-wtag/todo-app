@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Input from './Input';
-
 import { FaEdit, FaTrash, FaRegSave } from 'react-icons/fa';
 import { ImCancelCircle } from 'react-icons/im';
+import PropTypes from 'prop-types';
 
 const Todo = ({
   id,
@@ -22,7 +22,7 @@ const Todo = ({
   return (
     <li>
       {isEditing ? (
-        <>
+        <div className='input-container'>
           <Input
             type='text'
             name={newName}
@@ -45,7 +45,7 @@ const Todo = ({
             }}
             className='cancel-icon'
           />
-        </>
+        </div>
       ) : (
         <>
           <p className={`${checked ? 'todo-completed' : 'todo-name'}`}>
@@ -71,6 +71,28 @@ const Todo = ({
       )}
     </li>
   );
+};
+
+Todo.defaultProps = {
+  id: null,
+  name: '',
+  checked: false,
+  isEditing: false,
+  onChangeTodos: () => {},
+  onEdit: () => {},
+  onEditCancel: () => {},
+  onSave: () => {},
+};
+
+Todo.propTypes = {
+  id: PropTypes.number,
+  name: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+  onChangeTodos: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onEditCancel: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default Todo;

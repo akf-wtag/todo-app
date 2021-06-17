@@ -1,5 +1,6 @@
 import Todo from './Todo';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const TodoList = ({ todos, onChangeTodos, todosTitle }) => {
   const [todoIdToEdit, setTodoIdToEdit] = useState();
@@ -31,6 +32,24 @@ const TodoList = ({ todos, onChangeTodos, todosTitle }) => {
       </ul>
     </>
   );
+};
+
+TodoList.defaultProps = {
+  todos: [{ name: '', checked: false, id: null }],
+  onChangeTodos: () => {},
+  todosTitle: '',
+};
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      checked: PropTypes.bool,
+      id: PropTypes.number,
+    })
+  ).isRequired,
+  onChangeTodos: PropTypes.func.isRequired,
+  todosTitle: PropTypes.string.isRequired,
 };
 
 export default TodoList;
