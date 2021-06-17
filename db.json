@@ -3,7 +3,17 @@
     {
       "id": 767.5080064008777,
       "name": "a",
-      "checked": false
+      "checked": true
+    },
+    {
+      "id": 325.08083510543287,
+      "name": "b",
+      "checked": true
+    },
+    {
+      "id": 308.3884738371856,
+      "name": "c",
+      "checked": true
     }
   ]
 }

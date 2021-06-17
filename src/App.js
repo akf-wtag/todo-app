@@ -88,7 +88,6 @@ const App = () => {
   }, []);
 
   const onChangeTodos = (id, name, checked) => {
-    // if (todos.length > 0) {
     todos.forEach((todo) => {
       if (todo.id === id) {
         isNewTodo = 0;
@@ -100,7 +99,6 @@ const App = () => {
         else deleteTodo(todo.id);
       }
     });
-    // }
 
     if (isNewTodo && name !== '') {
       postTodo(id, name, checked);
