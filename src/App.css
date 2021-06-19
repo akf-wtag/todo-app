@@ -114,16 +114,14 @@ ul {
   color: red;
   cursor: pointer;
   font-size: 16px;
-}
-
-.save-icon {
-  justify-self: center;
+  justify-self: end;
 }
 
 .trash-icon {
   color: red;
   cursor: pointer;
   font-size: 14px;
+  justify-self: end;
 }
 
 .edit-icon,
@@ -131,7 +129,7 @@ ul {
   color: #28a745;
   cursor: pointer;
   font-size: 16px;
-  justify-self: center;
+  justify-self: end;
 }
 
 .todo-completed {
