@@ -20,9 +20,9 @@ const Todo = ({
   if (checked) isChecked = true;
 
   return (
-    <li>
+    <>
       {isEditing ? (
-        <div className='input-container'>
+        <li className='editing-list'>
           <Input
             type='text'
             name={newName}
@@ -45,12 +45,10 @@ const Todo = ({
             }}
             className='cancel-icon'
           />
-        </div>
+        </li>
       ) : (
-        <>
-          <p className={`${checked ? 'todo-completed' : 'todo-name'}`}>
-            {name}
-          </p>
+        <li className='not-editing-list'>
+          <div className={checked ? 'todo-completed' : 'todo-name'}>{name}</div>
           <Input
             type='checkbox'
             onChange={() => onChangeTodos(id, name, !checked)}
@@ -67,9 +65,9 @@ const Todo = ({
             onClick={() => onChangeTodos(id, name, checked)}
             className='trash-icon'
           />
-        </>
+        </li>
       )}
-    </li>
+    </>
   );
 };
 

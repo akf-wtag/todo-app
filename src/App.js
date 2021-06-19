@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { ImCross } from 'react-icons/im';
 import Input from './components/Input';
 import Button from './components/Button';
 import TodoList from './components/TodoList';
+import Loading from './components/Loading';
 import './App.css';
 import axios from 'axios';
 
@@ -9,6 +11,7 @@ const App = () => {
   const [todos, setTodos] = useState([]);
   const [name, setName] = useState('');
   const [searchText, setSearchText] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const url = 'http://localhost:3000/todos';
 
@@ -36,17 +39,23 @@ const App = () => {
   let isNewTodo = 1;
 
   const getTodos = async () => {
+    setLoading(true);
+
     await axios
       .get(url)
       .then((response) => {
+        setLoading(false);
         setTodos(response.data);
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error);
       });
   };
 
   const postTodo = async (id, name, checked) => {
+    setLoading(true);
+
     await axios
       .post(url, {
         id,
@@ -54,31 +63,41 @@ const App = () => {
         checked,
       })
       .then((response) => {
+        setLoading(false);
         setTodos((prevTodos) => [...prevTodos, response.data]);
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error);
       });
   };
 
   const deleteTodo = async (id) => {
+    setLoading(true);
+
     await axios
       .delete(`${url}/${id}`)
       .then((response) => {
+        setLoading(false);
         getTodos();
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error);
       });
   };
 
   const updateTodo = async (id, name, checked) => {
+    setLoading(true);
+
     await axios
       .patch(`${url}/${id}`, { name, checked })
       .then((response) => {
+        setLoading(false);
         getTodos();
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error);
       });
   };
@@ -88,37 +107,43 @@ const App = () => {
   }, []);
 
   const onChangeTodos = (id, name, checked) => {
-    todos.forEach((todo) => {
+    todos.every((todo) => {
       if (todo.id === id) {
         isNewTodo = 0;
-        if (name !== '' && todo.name !== name && todo.checked !== checked)
+        if (todo.name === name && todo.checked === checked) deleteTodo(todo.id);
+        if (todo.name !== name || todo.checked !== checked)
           updateTodo(id, name, checked);
-        else if (name !== '' && todo.name !== name)
-          updateTodo(id, name, checked);
-        else if (todo.checked !== checked) return updateTodo(id, name, checked);
-        else deleteTodo(todo.id);
+        return false;
       }
+      return true;
     });
 
-    if (isNewTodo && name !== '') {
+    if (isNewTodo) {
       postTodo(id, name, checked);
       isNewTodo = 1;
     }
     setName('');
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div>
-      <header>
+      <header className='app-header'>
         <h1>To-Do app</h1>
       </header>
       <div className='input-container'>
-        <Input
-          type='text'
-          placeholder='add a too...'
-          name={name}
-          onChange={nameHandler}
-        />
+        <div className='add-todo-input'>
+          <Input
+            type='text'
+            placeholder='add a too...'
+            name={name}
+            onChange={nameHandler}
+          />
+          <ImCross className='cross-icon' onClick={() => setName('')} />
+        </div>
         <Button name={name} onClick={onChangeTodos} btnName='Add' />
         {todos.length > 0 ? (
           <Input

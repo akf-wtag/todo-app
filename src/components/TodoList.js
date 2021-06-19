@@ -13,7 +13,7 @@ const TodoList = ({ todos, onChangeTodos, todosTitle }) => {
       ) : (
         ''
       )}
-      <ul>
+      <ul className={todos.length > 0 ? 'todo-container' : ''}>
         {todos.map((todo) => (
           <Todo
             key={todo.id}
