@@ -106,12 +106,13 @@ const App = () => {
     getTodos();
   }, []);
 
-  const onChangeTodos = (id, name, checked) => {
+  const onChangeTodos = (id, name, checked, isDelClicked) => {
     todos.every((todo) => {
       if (todo.id === id) {
         isNewTodo = 0;
-        if (todo.name === name && todo.checked === checked) deleteTodo(todo.id);
-        if (todo.name !== name || todo.checked !== checked)
+        if (todo.name === name && todo.checked === checked && isDelClicked)
+          deleteTodo(todo.id);
+        else if (todo.name !== name || todo.checked !== checked)
           updateTodo(id, name, checked);
         return false;
       }

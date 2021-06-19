@@ -21,8 +21,8 @@ const TodoList = ({ todos, onChangeTodos, todosTitle }) => {
             name={todo.name}
             checked={todo.checked}
             isEditing={todo.id === todoIdToEdit}
-            onChangeTodos={(id, name, checked) =>
-              onChangeTodos(id, name, checked)
+            onChangeTodos={(id, name, checked, isDelClicked) =>
+              onChangeTodos(id, name, checked, isDelClicked)
             }
             onEdit={(id) => setTodoIdToEdit(id)}
             onEditCancel={() => setTodoIdToEdit(null)}

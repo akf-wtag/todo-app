@@ -31,7 +31,7 @@ const Todo = ({
           />
           <FaRegSave
             onClick={() => {
-              onChangeTodos(id, newName, checked);
+              onChangeTodos(id, newName, checked, 0);
               onSave();
               setNewName('');
             }}
@@ -51,7 +51,7 @@ const Todo = ({
           <div className={checked ? 'todo-completed' : 'todo-name'}>{name}</div>
           <Input
             type='checkbox'
-            onChange={() => onChangeTodos(id, name, !checked)}
+            onChange={() => onChangeTodos(id, name, !checked, 0)}
             isChecked={isChecked}
           />
           <FaEdit
@@ -62,7 +62,7 @@ const Todo = ({
             className='edit-icon'
           />
           <FaTrash
-            onClick={() => onChangeTodos(id, name, checked)}
+            onClick={() => onChangeTodos(id, name, checked, 1)}
             className='trash-icon'
           />
         </li>
