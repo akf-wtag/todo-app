@@ -24,6 +24,11 @@ const Todo = ({
       {isEditing ? (
         <li className='editing-list'>
           <Input
+            type='checkbox'
+            onChange={() => onChangeTodos(id, name, !checked, 0)}
+            isChecked={isChecked}
+          />
+          <Input
             type='text'
             name={newName}
             onChange={(e) => setNewName(e.target.value)}
@@ -48,12 +53,12 @@ const Todo = ({
         </li>
       ) : (
         <li className='not-editing-list'>
-          <div className={checked ? 'todo-completed' : 'todo-name'}>{name}</div>
           <Input
             type='checkbox'
             onChange={() => onChangeTodos(id, name, !checked, 0)}
             isChecked={isChecked}
           />
+          <div className={checked ? 'todo-completed' : 'todo-name'}>{name}</div>
           <FaEdit
             onClick={() => {
               onEdit(id);

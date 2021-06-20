@@ -61,7 +61,7 @@ button {
 
 Input[type='checkbox'] {
   cursor: pointer;
-  justify-self: end;
+  justify-self: center;
 }
 
 ul {
@@ -83,24 +83,25 @@ ul {
 
 .not-editing-list {
   display: grid;
-  grid-template-columns: 10fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 10fr 1fr 1fr;
   align-items: center;
-  justify-items: start;
+  justify-items: center;
 }
 
 .editing-list {
   display: grid;
-  grid-template-columns: 11fr 1fr 1fr;
+  grid-template-columns: 1fr 10fr 1fr 1fr;
   align-items: center;
+  justify-items: center;
 }
 
-.editing-list input {
+.editing-list input[type='text'] {
   border-bottom: 1px solid green;
   border-radius: 0;
-  padding: 0 0 0 5px;
-  margin-left: -4px;
+  padding: 0;
   margin-top: 3px;
   font-size: larger;
+  justify-self: start;
 }
 
 .cross-icon {
@@ -114,14 +115,12 @@ ul {
   color: red;
   cursor: pointer;
   font-size: 16px;
-  justify-self: end;
 }
 
 .trash-icon {
   color: red;
   cursor: pointer;
   font-size: 14px;
-  justify-self: end;
 }
 
 .edit-icon,
@@ -129,7 +128,6 @@ ul {
   color: #28a745;
   cursor: pointer;
   font-size: 16px;
-  justify-self: end;
 }
 
 .todo-completed {
@@ -137,10 +135,12 @@ ul {
   text-decoration-color: red;
   text-decoration-thickness: 2px;
   font-size: large;
+  justify-self: start;
 }
 
 .todo-name {
   font-size: large;
+  justify-self: start;
 }
 
 .loading {
