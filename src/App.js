@@ -139,9 +139,12 @@ const App = () => {
         <div className='add-todo-input'>
           <Input
             type='text'
-            placeholder='add a too...'
+            placeholder='add a todo...'
             name={name}
             onChange={nameHandler}
+            onKeyPress={() => {
+              onChangeTodos(Math.random() * 1000, name, false, false);
+            }}
           />
           <ImCross className='cross-icon' onClick={() => setName('')} />
         </div>

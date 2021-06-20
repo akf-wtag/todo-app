@@ -19,29 +19,29 @@ const Todo = ({
   let isChecked = false;
   if (checked) isChecked = true;
 
+  const saveHandler = () => {
+    onChangeTodos(id, newName, checked, false);
+    onSave();
+    setNewName('');
+  };
+
   return (
-    <>
+    <li className={isEditing ? 'editing-list' : 'not-editing-list'}>
+      <Input
+        type='checkbox'
+        onChange={() => onChangeTodos(id, name, !checked, false)}
+        isChecked={isChecked}
+      />
       {isEditing ? (
-        <li className='editing-list'>
-          <Input
-            type='checkbox'
-            onChange={() => onChangeTodos(id, name, !checked, 0)}
-            isChecked={isChecked}
-          />
+        <>
           <Input
             type='text'
             name={newName}
             onChange={(e) => setNewName(e.target.value)}
             focus={true}
+            onKeyPress={saveHandler}
           />
-          <FaRegSave
-            onClick={() => {
-              onChangeTodos(id, newName, checked, 0);
-              onSave();
-              setNewName('');
-            }}
-            className='save-icon'
-          />
+          <FaRegSave onClick={saveHandler} className='save-icon' />
 
           <ImCancelCircle
             onClick={() => {
@@ -50,14 +50,9 @@ const Todo = ({
             }}
             className='cancel-icon'
           />
-        </li>
+        </>
       ) : (
-        <li className='not-editing-list'>
-          <Input
-            type='checkbox'
-            onChange={() => onChangeTodos(id, name, !checked, 0)}
-            isChecked={isChecked}
-          />
+        <>
           <div className={checked ? 'todo-completed' : 'todo-name'}>{name}</div>
           <FaEdit
             onClick={() => {
@@ -67,12 +62,12 @@ const Todo = ({
             className='edit-icon'
           />
           <FaTrash
-            onClick={() => onChangeTodos(id, name, checked, 1)}
+            onClick={() => onChangeTodos(id, name, checked, true)}
             className='trash-icon'
           />
-        </li>
+        </>
       )}
-    </>
+    </li>
   );
 };
 

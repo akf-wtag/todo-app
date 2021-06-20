@@ -1,6 +1,14 @@
 import PropTypes from 'prop-types';
 
-const Input = ({ type, name, onChange, isChecked, focus, placeholder }) => {
+const Input = ({
+  type,
+  name,
+  onChange,
+  isChecked,
+  focus,
+  placeholder,
+  onKeyPress,
+}) => {
   return (
     <>
       <input
@@ -11,6 +19,9 @@ const Input = ({ type, name, onChange, isChecked, focus, placeholder }) => {
         autoFocus={focus}
         placeholder={placeholder}
         className={type}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') onKeyPress();
+        }}
       />
     </>
   );
