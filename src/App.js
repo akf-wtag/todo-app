@@ -173,29 +173,3 @@ const App = () => {
 };
 
 export default App;
-
-// {
-//       "id": 1,
-//       "name": "John",
-//       "age": 30
-//     },
-//     {
-//       "id": 2,
-//       "name": "Alex",
-//       "age": 25
-//     },
-//     {
-//       "id": 3,
-//       "name": "Robert",
-//       "age": 35
-//     },
-//     {
-//       "id": 4,
-//       "name": "Robert",
-//       "age": 35
-//     },
-//     {
-//       "id": 5,
-//       "name": "Robert",
-//       "age": 35
-//     }
