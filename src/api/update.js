@@ -1,15 +1,8 @@
-import axios from 'axios';
+import axios from './setup';
 
-export const updateTodo = async (url, id, name, checked) => {
-  // await axios
-  //   .patch(`${url}/${id}`, { name, checked })
-  //   .then((response) => {
-  //     getTodos().then(() => {
-  //       // setTodoIdToCheck(null);
-  //       // setTodoIdToSave(null);
-  //     });
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
+const updateTodo = async (id, name, checked) => {
+  const response = await axios.patch(`/${id}`, { name, checked });
+  return response;
 };
+
+export default updateTodo;

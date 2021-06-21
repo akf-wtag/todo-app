@@ -2,17 +2,7 @@ import Todo from './Todo';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const TodoList = ({
-  todos,
-  onChangeTodos,
-  todosTitle,
-  todoIdToCheck,
-  setTodoIdToCheck,
-  todoIdToDelete,
-  setTodoIdToDelete,
-  setTodoIdToSave,
-  todoIdToSave,
-}) => {
+const TodoList = ({ todos, updatedTodos, todosTitle }) => {
   const [todoIdToEdit, setTodoIdToEdit] = useState();
 
   return (
@@ -31,21 +21,10 @@ const TodoList = ({
             id={todo.id}
             name={todo.name}
             checked={todo.checked}
-            onChangeTodos={(id, name, checked, isDelClicked) =>
-              onChangeTodos(id, name, checked, isDelClicked)
-            }
+            updatedTodos={(data) => updatedTodos(data)}
             isEditing={todo.id === todoIdToEdit}
             onEdit={(id) => setTodoIdToEdit(id)}
             onEditCancel={() => setTodoIdToEdit(null)}
-            isChecking={todo.id === todoIdToCheck}
-            onCheck={(id) => setTodoIdToCheck(id)}
-            isDeleting={todo.id === todoIdToDelete}
-            onDelete={(id) => setTodoIdToDelete(id)}
-            isSaving={todo.id === todoIdToSave}
-            onSave={(id) => {
-              setTodoIdToEdit(null);
-              setTodoIdToSave(id);
-            }}
           />
         ))}
       </ul>
@@ -55,12 +34,8 @@ const TodoList = ({
 
 TodoList.defaultProps = {
   todos: [{ name: '', checked: false, id: null }],
-  onChangeTodos: () => {},
+  updatedTodos: () => {},
   todosTitle: '',
-  todoIdToCheck: null,
-  setTodoIdToCheck: () => {},
-  todoIdToDelete: null,
-  setTodoIdToDelete: () => {},
 };
 
 TodoList.propTypes = {
@@ -71,12 +46,8 @@ TodoList.propTypes = {
       id: PropTypes.number,
     })
   ).isRequired,
-  onChangeTodos: PropTypes.func.isRequired,
+  updatedTodos: PropTypes.func.isRequired,
   todosTitle: PropTypes.string.isRequired,
-  todoIdToCheck: PropTypes.number,
-  setTodoIdToCheck: PropTypes.func.isRequired,
-  todoIdToDelete: PropTypes.number,
-  setTodoIdToDelete: PropTypes.func.isRequired,
 };
 
 export default TodoList;

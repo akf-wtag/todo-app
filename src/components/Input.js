@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 
 const Input = ({
   type,
+  placeholder,
   name,
   onChange,
   isChecked,
   focus,
-  placeholder,
   onKeyPress,
 }) => {
   return (

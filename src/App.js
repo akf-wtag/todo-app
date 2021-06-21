@@ -4,22 +4,15 @@ import Input from './components/Input';
 import Button from './components/Button';
 import TodoList from './components/TodoList';
 import './App.css';
-import { getTodos } from './api/get';
-import { postTodo } from './api/post';
-import { deleteTodo } from './api/delete';
-import { updateTodo } from './api/update';
+import getTodos from './api/get';
+import postTodo from './api/post';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [name, setName] = useState('');
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
-  const [addLoading, setAddLoading] = useState(false);
-  const [todoIdToCheck, setTodoIdToCheck] = useState();
-  const [todoIdToDelete, setTodoIdToDelete] = useState();
-  const [todoIdToSave, setTodoIdToSave] = useState();
-
-  const url = 'http://localhost:3000/todos';
+  const [postLoading, setPostLoading] = useState(false);
 
   const nameHandler = (e) => {
     setName(e.target.value);
@@ -29,58 +22,39 @@ const App = () => {
     setSearchText(e.target.value);
   };
 
-  let incompleteTodos = [];
-  let completeTodos = [];
-
-  // todos &&
-  //   todos.forEach((todo) => {
-  //     if (
-  //       searchText === '' ||
-  //       todo.name.toLowerCase().includes(searchText.toLowerCase())
-  //     ) {
-  //       if (!todo.checked) incompleteTodos.push(todo);
-  //       else completeTodos.push(todo);
-  //     }
-  //   });
-
-  let isNewTodo = 1;
-
   useEffect(() => {
     setLoading(true);
-    const response = getTodos(url);
-    response.then(() => {
+    const getResponse = getTodos();
+    getResponse.then((response) => {
       setTodos(response.data);
       setLoading(false);
     });
   }, []);
 
-  const onChangeTodos = (id, name, checked, isDelClicked) => {
-    todos &&
-      todos.every((todo) => {
-        if (todo.id === id) {
-          isNewTodo = 0;
-          if (todo.name === name && todo.checked === checked && isDelClicked)
-            deleteTodo(url, todo.id);
-          else if (todo.name !== name || todo.checked !== checked)
-            updateTodo(url, id, name, checked);
-          return false;
-        }
-        return true;
-      });
+  let incompleteTodos = [];
+  let completeTodos = [];
 
-    if (isNewTodo) {
-      if (name === '') console.log('Field is empty');
-      else {
-        setAddLoading(true);
-        const response = postTodo(url, id, name, checked);
-        response.then(() => {
-          setAddLoading(false);
-          setTodos((prevTodos) => [...prevTodos, response.data]);
-        });
-      }
-      isNewTodo = 1;
+  todos.forEach((todo) => {
+    if (
+      searchText === '' ||
+      todo.name.toLowerCase().includes(searchText.toLowerCase())
+    ) {
+      if (!todo.checked) incompleteTodos.push(todo);
+      else completeTodos.push(todo);
     }
-    setName('');
+  });
+
+  const onChangeTodos = (id, name, checked) => {
+    if (name === '') console.log('Field is empty');
+    else {
+      setPostLoading(true);
+      const postResponse = postTodo(id, name, checked);
+      postResponse.then((response) => {
+        setTodos((prevTodos) => [...prevTodos, response.data]);
+        setPostLoading(false);
+      });
+      setName('');
+    }
   };
 
   if (loading) {
@@ -105,11 +79,10 @@ const App = () => {
           />
           <ImCross className='cross-icon' onClick={() => setName('')} />
         </div>
-        {addLoading ? (
+        {postLoading ? (
           <div className='add-loading'></div>
         ) : (
           <Button
-            name={name}
             onClick={() =>
               onChangeTodos(Math.random() * 1000, name, false, false)
             }
@@ -117,7 +90,7 @@ const App = () => {
             className='add'
           />
         )}
-        {todos && todos.length > 0 ? (
+        {todos.length > 0 ? (
           <Input
             type='text'
             placeholder='search here...'
@@ -131,25 +104,13 @@ const App = () => {
 
       <TodoList
         todos={incompleteTodos}
-        onChangeTodos={onChangeTodos}
         todosTitle='Incomplete Todos'
-        todoIdToCheck={todoIdToCheck}
-        setTodoIdToCheck={setTodoIdToCheck}
-        todoIdToDelete={todoIdToDelete}
-        setTodoIdToDelete={setTodoIdToDelete}
-        todoIdToSave={todoIdToSave}
-        setTodoIdToSave={setTodoIdToSave}
+        updatedTodos={(data) => setTodos([...data])}
       />
       <TodoList
         todos={completeTodos}
-        onChangeTodos={onChangeTodos}
         todosTitle='Complete Todos'
-        todoIdToCheck={todoIdToCheck}
-        setTodoIdToCheck={setTodoIdToCheck}
-        todoIdToDelete={todoIdToDelete}
-        setTodoIdToDelete={setTodoIdToDelete}
-        todoIdToSave={todoIdToSave}
-        setTodoIdToSave={setTodoIdToSave}
+        updatedTodos={(data) => setTodos([...data])}
       />
     </div>
   );
