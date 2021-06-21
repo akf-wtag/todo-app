@@ -16,6 +16,7 @@ const Todo = ({
   onCheck,
   isDeleting,
   onDelete,
+  isSaving,
   onSave,
 }) => {
   const [newName, setNewName] = useState('');
@@ -65,7 +66,13 @@ const Todo = ({
         </>
       ) : (
         <>
-          <div className={checked ? 'todo-completed' : 'todo-name'}>{name}</div>
+          {isSaving ? (
+            <div className='check-loading'></div>
+          ) : (
+            <div className={checked ? 'todo-completed' : 'todo-name'}>
+              {name}
+            </div>
+          )}
           <FaEdit
             onClick={() => {
               onEdit(id);

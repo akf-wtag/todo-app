@@ -14,16 +14,30 @@ Enzyme.configure({ adapter: new Adapter() });
 // });
 
 test('Todo receives name prop correctly', () => {
-  const wrapper = mount(<Todo isEditing={false} name={'ab'} />);
-  expect(wrapper.find('p').text()).toEqual('ab');
+  const wrapper = mount(<Todo checked={false} isEditing={false} name='ab' />);
+  expect(wrapper.find('.todo-name').text()).toEqual('ab');
 });
 
 test('Todo receives checked prop correctly', () => {
   const wrapper = mount(<Todo isEditing={false} checked={true} />);
-  expect(wrapper.find('p').props().className).toEqual('todo-completed');
+  expect(wrapper.find('.todo-completed').props().className).toEqual(
+    'todo-completed'
+  );
 });
 
 test('Todo receives isEditing prop correctly', () => {
-  const wrapper = shallow(<Todo isEditing={true} />);
-  expect(wrapper.find('.input-container').children().length).toBe(3);
+  const wrapper = mount(<Todo isEditing={true} />);
+  expect(wrapper.find('FaRegSave')).toHaveLength(1);
 });
+
+test('Todo receives isChecking prop correctly', () => {
+  const wrapper = mount(<Todo isChecking={true} />);
+  expect(wrapper.find('.check-loading')).toHaveLength(1);
+});
+
+test('Todo receives isDeleting prop correctly', () => {
+  const wrapper = mount(<Todo isDeleting={false} />);
+  expect(wrapper.find('FaTrash')).toHaveLength(1);
+});
+
+// expect(wrapper.find('.input-container').children().length).toBe(3);

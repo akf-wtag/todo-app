@@ -10,6 +10,8 @@ const TodoList = ({
   setTodoIdToCheck,
   todoIdToDelete,
   setTodoIdToDelete,
+  setTodoIdToSave,
+  todoIdToSave,
 }) => {
   const [todoIdToEdit, setTodoIdToEdit] = useState();
 
@@ -39,7 +41,11 @@ const TodoList = ({
             onCheck={(id) => setTodoIdToCheck(id)}
             isDeleting={todo.id === todoIdToDelete}
             onDelete={(id) => setTodoIdToDelete(id)}
-            onSave={(id) => setTodoIdToEdit(null)}
+            isSaving={todo.id === todoIdToSave}
+            onSave={(id) => {
+              setTodoIdToEdit(null);
+              setTodoIdToSave(id);
+            }}
           />
         ))}
       </ul>
@@ -51,6 +57,10 @@ TodoList.defaultProps = {
   todos: [{ name: '', checked: false, id: null }],
   onChangeTodos: () => {},
   todosTitle: '',
+  todoIdToCheck: null,
+  setTodoIdToCheck: () => {},
+  todoIdToDelete: null,
+  setTodoIdToDelete: () => {},
 };
 
 TodoList.propTypes = {
@@ -63,6 +73,10 @@ TodoList.propTypes = {
   ).isRequired,
   onChangeTodos: PropTypes.func.isRequired,
   todosTitle: PropTypes.string.isRequired,
+  todoIdToCheck: PropTypes.number,
+  setTodoIdToCheck: PropTypes.func.isRequired,
+  todoIdToDelete: PropTypes.number,
+  setTodoIdToDelete: PropTypes.func.isRequired,
 };
 
 export default TodoList;

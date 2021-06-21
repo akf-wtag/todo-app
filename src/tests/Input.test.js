@@ -23,7 +23,7 @@ test('Input calls onChange prop on input onChange event', () => {
 
 test('Input receives isChecked prop correctly', () => {
   const wrapper = mount(<Input isChecked={false} />);
-  expect(wrapper.find('input').props().isChecked).toBeFalsy;
+  expect(wrapper.find('input').props().checked).toBeFalsy;
 });
 
 test('Input receives focus prop correctly', () => {
@@ -36,7 +36,9 @@ test('Input receives placeholder prop correctly', () => {
   expect(wrapper.find('input').props().placeholder).toEqual('ab');
 });
 
-test('Input receives type prop correctly', () => {
-  const wrapper = mount(<Input type='ab' />);
-  expect(wrapper.find('input').props().className).toEqual('ab');
+test('Input receives onKeyPress prop correctly', () => {
+  const mockfn = jest.fn();
+  const wrapper = mount(<Input onKeyPress={mockfn} />);
+  wrapper.find('input').simulate('keypress', { key: 'Enter' });
+  expect(mockfn).toHaveBeenCalled();
 });

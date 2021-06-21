@@ -20,7 +20,9 @@ const Input = ({
         placeholder={placeholder}
         className={type}
         onKeyPress={(e) => {
-          if (e.key === 'Enter') onKeyPress();
+          if (e.key === 'Enter') {
+            onKeyPress();
+          }
         }}
       />
     </>
@@ -34,6 +36,7 @@ Input.defaultProps = {
   isChecked: false,
   focus: false,
   placeholder: '',
+  onKeyPress: () => {},
 };
 
 Input.propTypes = {
@@ -43,6 +46,7 @@ Input.propTypes = {
   isChecked: PropTypes.bool.isRequired,
   focus: PropTypes.bool.isRequired,
   placeholder: PropTypes.string.isRequired,
+  onKeyPress: PropTypes.func.isRequired,
 };
 
 export default Input;
