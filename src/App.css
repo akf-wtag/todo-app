@@ -35,18 +35,12 @@ input[type='text'] {
   border-radius: 5px;
 }
 
-*:focus {
-  outline: none;
+::placeholder {
+  font-size: small;
 }
 
-button {
-  border-radius: 5px;
-  color: white;
-  border: none;
-  padding: 5px 15px 5px 15px;
-  cursor: pointer;
-  font-size: medium;
-  font-weight: 500;
+:focus {
+  outline: none;
 }
 
 .add-todo-input {
@@ -54,9 +48,41 @@ button {
   border-radius: 5px;
 }
 
-.Add {
+.add-loading {
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: 2px dotted white;
+  border-left-color: transparent;
+  border-radius: 50%;
+  animation: circle 2s ease-in 0s infinite;
+}
+
+.check-loading {
+  width: 13px;
+  height: 13px;
+  background-color: transparent;
+  border: 2px dotted green;
+  border-left-color: transparent;
+  border-radius: 50%;
+  animation: circle 2s ease-in 0s infinite;
+}
+
+@keyframes circle {
+  0% {
+    transform: rotate(-360deg);
+  }
+}
+
+.add {
+  border-radius: 5px;
+  color: white;
+  border: none;
+  padding: 5px 15px 5px 15px;
+  cursor: pointer;
+  font-size: medium;
+  font-weight: 500;
   background-color: #20a729;
-  margin-bottom: 30px;
 }
 
 input[type='checkbox'] {
@@ -105,29 +131,33 @@ ul {
 }
 
 .cross-icon {
-  font-size: 12px;
   color: red;
   margin-right: 5px;
   cursor: pointer;
+  height: 13px;
+  width: 13px;
 }
 
 .cancel-icon {
   color: red;
   cursor: pointer;
-  font-size: 16px;
+  height: 16px;
+  width: 16px;
 }
 
 .trash-icon {
   color: red;
   cursor: pointer;
-  font-size: 14px;
+  height: 14px;
+  width: 14px;
 }
 
 .edit-icon,
 .save-icon {
   color: #28a745;
   cursor: pointer;
-  font-size: 16px;
+  height: 16px;
+  width: 16px;
 }
 
 .todo-completed {
@@ -143,9 +173,11 @@ ul {
   justify-self: start;
 }
 
-.loading {
-  width: 100px;
-  margin: 0 auto;
-  text-align: center;
+.fetch-todo-loader {
+  width: 400px;
   color: white;
+  font-size: xx-large;
+  font-weight: bold;
+  margin: 0 auto;
+  margin-top: 100px;
 }

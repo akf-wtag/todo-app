@@ -3,7 +3,6 @@ import { ImCross } from 'react-icons/im';
 import Input from './components/Input';
 import Button from './components/Button';
 import TodoList from './components/TodoList';
-import Loading from './components/Loading';
 import './App.css';
 import axios from 'axios';
 
@@ -12,6 +11,9 @@ const App = () => {
   const [name, setName] = useState('');
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
+  const [addLoading, setAddLoading] = useState(false);
+  const [todoIdToCheck, setTodoIdToCheck] = useState();
+  const [todoIdToDelete, setTodoIdToDelete] = useState();
 
   const url = 'http://localhost:3000/todos';
 
@@ -39,22 +41,19 @@ const App = () => {
   let isNewTodo = 1;
 
   const getTodos = async () => {
-    setLoading(true);
-
     await axios
       .get(url)
       .then((response) => {
-        setLoading(false);
         setTodos(response.data);
+        setLoading(false);
       })
       .catch((error) => {
-        setLoading(false);
         console.log(error);
       });
   };
 
   const postTodo = async (id, name, checked) => {
-    setLoading(true);
+    setAddLoading(true);
 
     await axios
       .post(url, {
@@ -63,41 +62,36 @@ const App = () => {
         checked,
       })
       .then((response) => {
-        setLoading(false);
+        setAddLoading(false);
         setTodos((prevTodos) => [...prevTodos, response.data]);
       })
       .catch((error) => {
-        setLoading(false);
+        setAddLoading(false);
         console.log(error);
       });
   };
 
   const deleteTodo = async (id) => {
-    setLoading(true);
-
     await axios
       .delete(`${url}/${id}`)
       .then((response) => {
-        setLoading(false);
+        setTodoIdToDelete(null);
         getTodos();
       })
       .catch((error) => {
-        setLoading(false);
+        setTodoIdToDelete(null);
         console.log(error);
       });
   };
 
   const updateTodo = async (id, name, checked) => {
-    setLoading(true);
-
     await axios
       .patch(`${url}/${id}`, { name, checked })
       .then((response) => {
-        setLoading(false);
         getTodos();
+        setTodoIdToCheck(null);
       })
       .catch((error) => {
-        setLoading(false);
         console.log(error);
       });
   };
@@ -120,14 +114,15 @@ const App = () => {
     });
 
     if (isNewTodo) {
-      postTodo(id, name, checked);
+      if (name === '') console.log('Field is empty');
+      else postTodo(id, name, checked);
       isNewTodo = 1;
     }
     setName('');
   };
 
   if (loading) {
-    return <Loading />;
+    return <div className='fetch-todo-loader'>Fetching todos...</div>;
   }
 
   return (
@@ -148,7 +143,16 @@ const App = () => {
           />
           <ImCross className='cross-icon' onClick={() => setName('')} />
         </div>
-        <Button name={name} onClick={onChangeTodos} btnName='Add' />
+        {addLoading ? (
+          <div className='add-loading'></div>
+        ) : (
+          <Button
+            name={name}
+            onClick={onChangeTodos}
+            btnName='Add'
+            className='add'
+          />
+        )}
         {todos.length > 0 ? (
           <Input
             type='text'
@@ -165,11 +169,19 @@ const App = () => {
         todos={incompleteTodos}
         onChangeTodos={onChangeTodos}
         todosTitle='Incomplete Todos'
+        todoIdToCheck={todoIdToCheck}
+        setTodoIdToCheck={setTodoIdToCheck}
+        todoIdToDelete={todoIdToDelete}
+        setTodoIdToDelete={setTodoIdToDelete}
       />
       <TodoList
         todos={completeTodos}
         onChangeTodos={onChangeTodos}
         todosTitle='Complete Todos'
+        todoIdToCheck={todoIdToCheck}
+        setTodoIdToCheck={setTodoIdToCheck}
+        todoIdToDelete={todoIdToDelete}
+        setTodoIdToDelete={setTodoIdToDelete}
       />
     </div>
   );

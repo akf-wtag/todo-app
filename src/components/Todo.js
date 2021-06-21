@@ -8,10 +8,14 @@ const Todo = ({
   id,
   name,
   checked,
-  isEditing,
   onChangeTodos,
+  isEditing,
   onEdit,
   onEditCancel,
+  isChecking,
+  onCheck,
+  isDeleting,
+  onDelete,
   onSave,
 }) => {
   const [newName, setNewName] = useState('');
@@ -20,18 +24,25 @@ const Todo = ({
   if (checked) isChecked = true;
 
   const saveHandler = () => {
+    onSave(id);
     onChangeTodos(id, newName, checked, false);
-    onSave();
     setNewName('');
   };
 
   return (
     <li className={isEditing ? 'editing-list' : 'not-editing-list'}>
-      <Input
-        type='checkbox'
-        onChange={() => onChangeTodos(id, name, !checked, false)}
-        isChecked={isChecked}
-      />
+      {isChecking ? (
+        <div className='check-loading'></div>
+      ) : (
+        <Input
+          type='checkbox'
+          onChange={() => {
+            onCheck(id);
+            onChangeTodos(id, name, !checked, false);
+          }}
+          isChecked={isChecked}
+        />
+      )}
       {isEditing ? (
         <>
           <Input
@@ -41,6 +52,7 @@ const Todo = ({
             focus={true}
             onKeyPress={saveHandler}
           />
+
           <FaRegSave onClick={saveHandler} className='save-icon' />
 
           <ImCancelCircle
@@ -61,10 +73,17 @@ const Todo = ({
             }}
             className='edit-icon'
           />
-          <FaTrash
-            onClick={() => onChangeTodos(id, name, checked, true)}
-            className='trash-icon'
-          />
+          {isDeleting ? (
+            <div className='check-loading'></div>
+          ) : (
+            <FaTrash
+              onClick={() => {
+                onDelete(id);
+                onChangeTodos(id, name, checked, true);
+              }}
+              className='trash-icon'
+            />
+          )}
         </>
       )}
     </li>

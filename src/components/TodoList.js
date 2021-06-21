@@ -2,8 +2,17 @@ import Todo from './Todo';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const TodoList = ({ todos, onChangeTodos, todosTitle }) => {
+const TodoList = ({
+  todos,
+  onChangeTodos,
+  todosTitle,
+  todoIdToCheck,
+  setTodoIdToCheck,
+  todoIdToDelete,
+  setTodoIdToDelete,
+}) => {
   const [todoIdToEdit, setTodoIdToEdit] = useState();
+
   return (
     <>
       {todos.length > 0 ? (
@@ -20,13 +29,17 @@ const TodoList = ({ todos, onChangeTodos, todosTitle }) => {
             id={todo.id}
             name={todo.name}
             checked={todo.checked}
-            isEditing={todo.id === todoIdToEdit}
             onChangeTodos={(id, name, checked, isDelClicked) =>
               onChangeTodos(id, name, checked, isDelClicked)
             }
+            isEditing={todo.id === todoIdToEdit}
             onEdit={(id) => setTodoIdToEdit(id)}
             onEditCancel={() => setTodoIdToEdit(null)}
-            onSave={() => setTodoIdToEdit(null)}
+            isChecking={todo.id === todoIdToCheck}
+            onCheck={(id) => setTodoIdToCheck(id)}
+            isDeleting={todo.id === todoIdToDelete}
+            onDelete={(id) => setTodoIdToDelete(id)}
+            onSave={(id) => setTodoIdToEdit(null)}
           />
         ))}
       </ul>

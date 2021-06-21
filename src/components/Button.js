@@ -1,16 +1,14 @@
 import PropTypes from 'prop-types';
 
-const Button = ({ name, onClick, btnName }) => {
+const Button = ({ name, onClick, btnName, className }) => {
   return (
-    <>
-      <button
-        type='button'
-        className={btnName}
-        onClick={() => onClick(Math.random() * 1000, name, false, false)}
-      >
-        {btnName}
-      </button>
-    </>
+    <button
+      type='button'
+      className={className}
+      onClick={() => onClick(Math.random() * 1000, name, false, false)}
+    >
+      {btnName}
+    </button>
   );
 };
 
