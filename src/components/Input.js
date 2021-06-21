@@ -13,11 +13,11 @@ const Input = ({
     <>
       <input
         type={type}
+        placeholder={placeholder}
         value={name}
         onChange={onChange}
         checked={isChecked}
         autoFocus={focus}
-        placeholder={placeholder}
         className={type}
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
@@ -31,21 +31,21 @@ const Input = ({
 
 Input.defaultProps = {
   type: '',
+  placeholder: '',
   name: '',
   onChange: () => {},
   isChecked: false,
   focus: false,
-  placeholder: '',
   onKeyPress: () => {},
 };
 
 Input.propTypes = {
   type: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   isChecked: PropTypes.bool.isRequired,
   focus: PropTypes.bool.isRequired,
-  placeholder: PropTypes.string.isRequired,
   onKeyPress: PropTypes.func.isRequired,
 };
 

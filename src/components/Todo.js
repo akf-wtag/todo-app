@@ -47,7 +47,7 @@ const Todo = ({
           type='checkbox'
           onChange={() => {
             setIsChecking(true);
-            const updateResponse = updateTodo(id, name, !checked);
+            const updateResponse = updateTodo(id, name, !checked); //how to mock async
             updateResponse.then((response) => {
               const getResponse = getTodos();
               getResponse.then((response) => {
@@ -92,7 +92,7 @@ const Todo = ({
           <FaEdit
             onClick={() => {
               onEdit(id);
-              setNewName(name);
+              setNewName(name); //how to mock test setNewName
             }}
             className='edit-icon'
           />

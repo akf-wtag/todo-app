@@ -4,22 +4,35 @@ import Todo from '../components/Todo';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-// test('Todo receives id prop correctly', () => {
-//   const mockfn = jest.fn();
-//   const wrapper = mount(<Todo isEditing={true} onChangeTodos={mockfn} />);
-//   wrapper
-//     .find('FaRegSave')
-//     .simulate('click', { target: { id: 1, newName: 'ab', checked: false } });
-//   expect(mockfn).toHaveBeenCalledWith(1, 'ab', false);
-// });
+test('Todo receives id & onEdit prop correctly', () => {
+  const mockfn1 = jest.fn();
+  // const mockfn2 = jest.fn();
+  const wrapper = mount(
+    <Todo
+      isEditing={false}
+      id={1}
+      // name='ab'
+      onEdit={mockfn1}
+      // setNewName={mockfn2}
+    />
+  );
+  wrapper.find('FaEdit').simulate('click');
+  expect(mockfn1).toHaveBeenCalledWith(1);
+
+  // expect(mockfn2).toHaveBeenCalledWith('ab');
+});
 
 test('Todo receives name prop correctly', () => {
-  const wrapper = mount(<Todo checked={false} isEditing={false} name='ab' />);
+  const wrapper = mount(
+    <Todo isEditing={false} isSaving={true} checked={false} name='ab' />
+  );
   expect(wrapper.find('.todo-name').text()).toEqual('ab');
 });
 
 test('Todo receives checked prop correctly', () => {
-  const wrapper = mount(<Todo isEditing={false} checked={true} />);
+  const wrapper = mount(
+    <Todo isEditing={false} isSaving={false} checked={true} />
+  );
   expect(wrapper.find('.todo-completed').props().className).toEqual(
     'todo-completed'
   );
@@ -30,14 +43,15 @@ test('Todo receives isEditing prop correctly', () => {
   expect(wrapper.find('FaRegSave')).toHaveLength(1);
 });
 
-test('Todo receives isChecking prop correctly', () => {
-  const wrapper = mount(<Todo isChecking={true} />);
-  expect(wrapper.find('.check-loading')).toHaveLength(1);
-});
+// test('Todo receives updatedTodos prop correctly', () => {
+//   // async function test
+// });
 
-test('Todo receives isDeleting prop correctly', () => {
-  const wrapper = mount(<Todo isDeleting={false} />);
-  expect(wrapper.find('FaTrash')).toHaveLength(1);
+test('Todo receives onEditCancel prop correctly', () => {
+  const mockfn = jest.fn();
+  const wrapper = mount(<Todo isEditing={true} onEditCancel={mockfn} />);
+  wrapper.find('ImCancelCircle').simulate('click');
+  expect(mockfn).toHaveBeenCalled();
 });
 
 // expect(wrapper.find('.input-container').children().length).toBe(3);

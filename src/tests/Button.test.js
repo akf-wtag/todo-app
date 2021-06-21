@@ -15,3 +15,8 @@ test('Button receives btnName prop correctly', () => {
   const wrapper = mount(<Button btnName='ab' />);
   expect(wrapper.find('button').text()).toEqual('ab');
 });
+
+test('Button receives className prop correctly', () => {
+  const wrapper = mount(<Button className='ab' />);
+  expect(wrapper.find('button').props().className).toEqual('ab');
+});

@@ -9,6 +9,11 @@ test('Input receives type prop correctly', () => {
   expect(wrapper.find('input').props().type).toEqual('ab');
 });
 
+test('Input receives placeholder prop correctly', () => {
+  const wrapper = mount(<Input placeholder='ab' />);
+  expect(wrapper.find('input').props().placeholder).toEqual('ab');
+});
+
 test('Input receives name prop correctly', () => {
   const wrapper = mount(<Input name='ab' />);
   expect(wrapper.find('input').props().value).toEqual('ab');
@@ -29,11 +34,6 @@ test('Input receives isChecked prop correctly', () => {
 test('Input receives focus prop correctly', () => {
   const wrapper = mount(<Input focus={false} />);
   expect(wrapper.find('input').props().autoFocus).toBeFalsy;
-});
-
-test('Input receives placeholder prop correctly', () => {
-  const wrapper = mount(<Input placeholder='ab' />);
-  expect(wrapper.find('input').props().placeholder).toEqual('ab');
 });
 
 test('Input receives onKeyPress prop correctly', () => {

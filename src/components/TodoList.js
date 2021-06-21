@@ -21,7 +21,7 @@ const TodoList = ({ todos, updatedTodos, todosTitle }) => {
             id={todo.id}
             name={todo.name}
             checked={todo.checked}
-            updatedTodos={(data) => updatedTodos(data)}
+            updatedTodos={(data) => updatedTodos(data)} //how to mock test updatedTodos
             isEditing={todo.id === todoIdToEdit}
             onEdit={(id) => setTodoIdToEdit(id)}
             onEditCancel={() => setTodoIdToEdit(null)}
