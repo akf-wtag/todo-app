@@ -1,10 +1,14 @@
 import axios from './setup';
 
-const postTodo = async (id, name, checked) => {
+const postTodo = async (title, id, name, checked) => {
   const response = await axios.post('', {
-    id,
-    name,
-    checked,
+    [title]: [
+      {
+        id,
+        name,
+        checked,
+      },
+    ],
   });
 
   return response;

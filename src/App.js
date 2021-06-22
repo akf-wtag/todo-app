@@ -10,17 +10,10 @@ import postTodo from './api/post';
 const App = () => {
   const [todos, setTodos] = useState([]);
   const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(true);
   const [postLoading, setPostLoading] = useState(false);
-
-  const nameHandler = (e) => {
-    setName(e.target.value);
-  };
-
-  const searchTodoHandler = (e) => {
-    setSearchText(e.target.value);
-  };
 
   useEffect(() => {
     setLoading(true);
@@ -44,16 +37,17 @@ const App = () => {
     }
   });
 
-  const onChangeTodos = (id, name, checked) => {
+  const onPostTodo = (title, id, name, checked) => {
     if (name === '') console.log('Field is empty');
     else {
       setPostLoading(true);
-      const postResponse = postTodo(id, name, checked);
+      const postResponse = postTodo(title, id, name, checked);
       postResponse.then((response) => {
         setTodos((prevTodos) => [...prevTodos, response.data]);
         setPostLoading(false);
       });
       setName('');
+      setTitle('');
     }
   };
 
@@ -70,11 +64,18 @@ const App = () => {
         <div className='add-todo-input'>
           <Input
             type='text'
+            placeholder='Title'
+            name={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onKeyPress={() => {}}
+          />
+          <Input
+            type='text'
             placeholder='add a todo...'
             name={name}
-            onChange={nameHandler}
+            onChange={(e) => setName(e.target.value)}
             onKeyPress={() => {
-              onChangeTodos(Math.random() * 1000, name, false, false);
+              onPostTodo(title, Math.random() * 1000, name, false, false);
             }}
           />
           <ImCross className='cross-icon' onClick={() => setName('')} />
@@ -84,7 +85,7 @@ const App = () => {
         ) : (
           <Button
             onClick={() =>
-              onChangeTodos(Math.random() * 1000, name, false, false)
+              onPostTodo(title, Math.random() * 1000, name, false, false)
             }
             btnName='Add'
             className='add'
@@ -95,7 +96,7 @@ const App = () => {
             type='text'
             placeholder='search here...'
             name={searchText}
-            onChange={searchTodoHandler}
+            onChange={(e) => setSearchText(e.target.value)}
           />
         ) : (
           ''
