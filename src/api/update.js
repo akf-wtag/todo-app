@@ -1,8 +1,8 @@
 import axios from './setup';
 
-const updateTodo = async (id, name, checked) => {
-  const response = await axios.patch(`/${id}`, { name, checked });
+const update = async (path, data) => {
+  const response = await axios.patch(path, data);
   return response;
 };
 
-export default updateTodo;
+export default update;

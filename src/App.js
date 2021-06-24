@@ -2,54 +2,46 @@ import { useState, useEffect } from 'react';
 import { ImCross } from 'react-icons/im';
 import Input from './components/Input';
 import Button from './components/Button';
-import TodoList from './components/TodoList';
+import Card from './components/Card';
 import './App.css';
-import getTodos from './api/get';
-import postTodo from './api/post';
+import get from './api/get';
+import post from './api/post';
+// import updateTodo from './api/update';
+import axios from 'axios';
+import { FaPlus } from 'react-icons/fa';
+import { v4 as uuid } from 'uuid';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
-  const [name, setName] = useState('');
   const [title, setTitle] = useState('');
   const [searchText, setSearchText] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [postLoading, setPostLoading] = useState(false);
+
+  const getTodos = () => {
+    const getData = get('http://localhost:3000/db');
+    getData.then((response) => {
+      const getLabels = response.data.labels;
+      const getTodos = response.data.todos;
+      let y = [];
+      getLabels.map((label) => {
+        let x = [];
+        getTodos.forEach((item) => {
+          if (item.labelId === label.id) {
+            x.push(item);
+          }
+        });
+        y.push({ [label.name]: x });
+      });
+      setTodos(y);
+    });
+  };
 
   useEffect(() => {
     setLoading(true);
-    const getResponse = getTodos();
-    getResponse.then((response) => {
-      setTodos(response.data);
-      setLoading(false);
-    });
+    getTodos();
+    setLoading(false);
   }, []);
-
-  let incompleteTodos = [];
-  let completeTodos = [];
-
-  todos.forEach((todo) => {
-    if (
-      searchText === '' ||
-      todo.name.toLowerCase().includes(searchText.toLowerCase())
-    ) {
-      if (!todo.checked) incompleteTodos.push(todo);
-      else completeTodos.push(todo);
-    }
-  });
-
-  const onPostTodo = (title, id, name, checked) => {
-    if (name === '') console.log('Field is empty');
-    else {
-      setPostLoading(true);
-      const postResponse = postTodo(title, id, name, checked);
-      postResponse.then((response) => {
-        setTodos((prevTodos) => [...prevTodos, response.data]);
-        setPostLoading(false);
-      });
-      setName('');
-      setTitle('');
-    }
-  };
 
   if (loading) {
     return <div className='fetch-todo-loader'>Fetching todos...</div>;
@@ -57,64 +49,84 @@ const App = () => {
 
   return (
     <div>
-      <header className='app-header'>
+      <div className='app-header'>
         <h1>To-Do app</h1>
-      </header>
+      </div>
       <div className='input-container'>
-        <div className='add-todo-input'>
-          <Input
-            type='text'
-            placeholder='Title'
-            name={title}
-            onChange={(e) => setTitle(e.target.value)}
-            onKeyPress={() => {}}
-          />
-          <Input
-            type='text'
-            placeholder='add a todo...'
-            name={name}
-            onChange={(e) => setName(e.target.value)}
-            onKeyPress={() => {
-              onPostTodo(title, Math.random() * 1000, name, false, false);
-            }}
-          />
-          <ImCross className='cross-icon' onClick={() => setName('')} />
-        </div>
+        <Input
+          type='text'
+          placeholder='Title'
+          name={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyPress={() => {}}
+          className='grid-title-input'
+        />
+
         {postLoading ? (
           <div className='add-loading'></div>
         ) : (
           <Button
-            onClick={() =>
-              onPostTodo(title, Math.random() * 1000, name, false, false)
-            }
             btnName='Add'
-            className='add'
+            className='add-btn'
+            onClick={() => {
+              setPostLoading(true);
+              const postdata = post('http://localhost:3000/labels', {
+                id: uuid(),
+                name: title,
+              });
+              postdata
+                .then(() => {
+                  getTodos();
+                  // const promise = new Promise((resolve, reject) => {
+                  //   resolve(getTodos());
+                  // });
+                  // promise.then(() => {
+                  //   setPostLoading(false);
+                  // });
+                })
+                .then(() => {
+                  setPostLoading(false);
+                });
+              setTitle('');
+            }}
           />
         )}
-        {todos.length > 0 ? (
+        {/* {Object.keys(todos).length > 0 ? (
           <Input
             type='text'
             placeholder='search here...'
             name={searchText}
             onChange={(e) => setSearchText(e.target.value)}
+            className='search-input'
           />
         ) : (
           ''
-        )}
+        )} */}
       </div>
 
-      <TodoList
-        todos={incompleteTodos}
-        todosTitle='Incomplete Todos'
-        updatedTodos={(data) => setTodos([...data])}
-      />
-      <TodoList
-        todos={completeTodos}
-        todosTitle='Complete Todos'
-        updatedTodos={(data) => setTodos([...data])}
-      />
+      <Card todos={todos} updatedTodos={getTodos} />
     </div>
   );
 };
 
 export default App;
+
+// setTodos((prevTodos) => {
+//   prevTodos[title] = [...prevTodos[title], response.data];
+//   return prevTodos;
+// });
+
+/* <div className='todo-text-input-container'>
+  <Input
+    type='text'
+    placeholder='add a todo...'
+    name={name}
+    onChange={(e) => setName(e.target.value)}
+    onKeyPress={() => {
+      onPostTodo(title, uuid(), name, false, false);
+    }}
+    className='todo-text-input'
+  />
+  <ImCross className='cross-icon' onClick={() => setName('')} />
+  <FaPlus className='add-item-icon' onClick={() => {}} />
+</div> */

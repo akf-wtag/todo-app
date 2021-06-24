@@ -1,17 +1,9 @@
 import axios from './setup';
 
-const postTodo = async (title, id, name, checked) => {
-  const response = await axios.post('', {
-    [title]: [
-      {
-        id,
-        name,
-        checked,
-      },
-    ],
-  });
+const post = async (path, data) => {
+  const response = await axios.post(path, data);
 
   return response;
 };
 
-export default postTodo;
+export default post;

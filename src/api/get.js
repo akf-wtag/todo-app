@@ -1,8 +1,8 @@
 import axios from './setup';
 
-const getTodos = async () => {
-  const response = await axios.get();
+const get = async (path) => {
+  let response = await axios.get(path);
   return response;
 };
 
-export default getTodos;
+export default get;

@@ -8,6 +8,7 @@ const Input = ({
   isChecked,
   focus,
   onKeyPress,
+  className,
 }) => {
   return (
     <>
@@ -18,7 +19,7 @@ const Input = ({
         onChange={onChange}
         checked={isChecked}
         autoFocus={focus}
-        className={type}
+        className={className}
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
             onKeyPress();

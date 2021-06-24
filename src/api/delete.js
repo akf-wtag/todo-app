@@ -1,8 +1,8 @@
 import axios from './setup';
 
-const deleteTodo = async (id) => {
-  const response = await axios.delete(`/${id}`);
+const del = async (path) => {
+  const response = await axios.delete(path);
   return response;
 };
 
-export default deleteTodo;
+export default del;

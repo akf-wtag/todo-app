@@ -1,9 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap');
-
 body {
   background-color: #f28ab2;
   margin: 0;
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: sans-serif;
 }
 
 .input-container {
@@ -15,20 +13,27 @@ body {
   margin-bottom: 50px;
 }
 
-header {
+.app-header {
   width: 200px;
   height: 50px;
   margin: 0 auto;
   text-align: center;
   color: white;
   font-weight: bolder;
-}
-
-.app-header {
   margin-bottom: 40px;
 }
 
-input[type='text'] {
+.grid-title-input,
+.search-input {
+  border: none;
+  padding: 5px 5px;
+  font-size: medium;
+  border-radius: 5px;
+  width: 238px;
+}
+
+.todo-text-input {
+  width: 215px;
   border: none;
   padding: 5px 5px;
   font-size: medium;
@@ -43,9 +48,22 @@ input[type='text'] {
   outline: none;
 }
 
-.add-todo-input {
+.todo-text-input-container {
   background: white;
   border-radius: 5px;
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+  align-items: center;
+  justify-items: center;
+}
+
+.fetch-todo-loader {
+  width: 400px;
+  color: white;
+  font-size: xx-large;
+  font-weight: bold;
+  margin: 0 auto;
+  margin-top: 100px;
 }
 
 .add-loading {
@@ -74,69 +92,109 @@ input[type='text'] {
   }
 }
 
-.add {
+.add-btn {
   border-radius: 5px;
   color: white;
   border: none;
-  padding: 5px 15px 5px 15px;
+  padding: 4px 10px 4px 10px;
   cursor: pointer;
   font-size: medium;
   font-weight: 500;
   background-color: #20a729;
 }
 
-input[type='checkbox'] {
+.checkbox {
   cursor: pointer;
   justify-self: center;
 }
 
-ul {
-  width: 600px;
+.card-container {
+  width: 900px;
   margin: 0 auto;
-  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 20px;
+  row-gap: 20px;
+}
+
+.list-header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  justify-content: space-evenly;
+  justify-items: center;
+}
+
+.add-to-list,
+.delete-list {
+  border: none;
+  background: none;
+  font-weight: 500;
+  cursor: pointer;
+  color: #20a729;
+}
+
+.delete-list {
+  color: red;
+}
+
+.ul-container {
+  height: fit-content;
+  padding-top: 15px;
   border-radius: 5px;
+  background: white;
+  display: grid;
+  grid-template-rows: 2fr auto;
+  row-gap: 5px;
+  justify-items: start;
+}
+
+ul {
+  width: 100%;
   list-style-type: none;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  gap: 15px;
-  background: white;
+  gap: 10px;
 }
 
-.todo-container {
-  padding: 10px;
-}
-
-.not-editing-list {
+li {
   display: grid;
-  grid-template-columns: 1fr 10fr 1fr 1fr;
-  align-items: center;
+  grid-template-columns: 1fr 6fr 1fr 1fr;
   justify-items: center;
+  align-items: center;
 }
 
-.editing-list {
-  display: grid;
-  grid-template-columns: 1fr 10fr 1fr 1fr;
-  align-items: center;
-  justify-items: center;
-}
-
-.editing-list input[type='text'] {
+.edit-text-input {
+  border: none;
   border-bottom: 1px solid green;
-  border-radius: 0;
   padding: 0;
-  margin-top: 3px;
-  font-size: medium;
+  font-size: 16px;
+  width: 190px;
+  margin-bottom: -2px;
+  margin-left: -4px;
+}
+
+.todo-completed {
+  text-decoration: line-through;
+  text-decoration-color: red;
+  text-decoration-thickness: 2px;
+  font-size: small;
   justify-self: start;
 }
 
-.cross-icon {
+.item-name {
+  justify-self: start;
+  font-size: small;
+}
+
+/* .cross-icon {
   color: red;
   margin-right: 5px;
   cursor: pointer;
   height: 13px;
   width: 13px;
-}
+} */
 
 .cancel-icon {
   color: red;
@@ -148,8 +206,8 @@ ul {
 .trash-icon {
   color: red;
   cursor: pointer;
-  height: 14px;
-  width: 14px;
+  height: 16px;
+  width: 16px;
 }
 
 .edit-icon,
@@ -158,26 +216,4 @@ ul {
   cursor: pointer;
   height: 16px;
   width: 16px;
-}
-
-.todo-completed {
-  text-decoration: line-through;
-  text-decoration-color: red;
-  text-decoration-thickness: 2px;
-  font-size: medium;
-  justify-self: start;
-}
-
-.todo-name {
-  font-size: medium;
-  justify-self: start;
-}
-
-.fetch-todo-loader {
-  width: 400px;
-  color: white;
-  font-size: xx-large;
-  font-weight: bold;
-  margin: 0 auto;
-  margin-top: 100px;
 }
