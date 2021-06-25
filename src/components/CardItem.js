@@ -5,9 +5,8 @@ import { GoTrashcan } from 'react-icons/go';
 import { ImCancelCircle } from 'react-icons/im';
 import del from '../api/delete';
 import update from '../api/update';
-// import getTodos from '../api/get';
 
-const CardItem = ({ itemId, titleId, title, name, checked, updatedTodos }) => {
+const CardItem = ({ itemId, name, checked, updatedTodos }) => {
   const [newName, setNewName] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
@@ -15,21 +14,30 @@ const CardItem = ({ itemId, titleId, title, name, checked, updatedTodos }) => {
   const [isSaving, setIsSaving] = useState(false);
 
   const saveHandler = () => {
-    // setIsSaving(true);
-    // const updateResponse = updateTodo(itemId, titleId, title, newName, checked);
-    // updateResponse.then((response) => {
-    //   const getResponse = getTodos();
-    //   getResponse.then((response) => {
-    //     updatedTodos(response.data);
-    //     setIsSaving(false);
-    //   });
-    // });
-    // setNewName('');
-    // setIsEditing(false);
+    setIsEditing(false);
+    setIsSaving(true);
+    const updateResponse = update(`/todos/${itemId}`, {
+      name: newName,
+    });
+    updateResponse
+      .then((response) => {
+        const getResponse = updatedTodos();
+        getResponse
+          .then((response) => {
+            setIsSaving(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setNewName('');
   };
 
   return (
-    <li className={isEditing ? 'editing-list' : 'not-editing-list'}>
+    <li>
       {isChecking ? (
         <div className='check-loading'></div>
       ) : (
@@ -37,14 +45,23 @@ const CardItem = ({ itemId, titleId, title, name, checked, updatedTodos }) => {
           type='checkbox'
           onChange={() => {
             setIsChecking(true);
-            const updateResponse = update(
-              `http://localhost:3000/todos/${itemId}`,
-              { checked: !checked }
-            );
-            updateResponse.then((response) => {
-              updatedTodos();
-              setIsChecking(false);
+            const updateResponse = update(`/todos/${itemId}`, {
+              checked: !checked,
             });
+            updateResponse
+              .then((response) => {
+                const getResponse = updatedTodos();
+                getResponse
+                  .then((response) => {
+                    setIsChecking(false);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           }}
           isChecked={checked}
           className='checkbox'
@@ -97,10 +114,17 @@ const CardItem = ({ itemId, titleId, title, name, checked, updatedTodos }) => {
                 const deleteResponse = del(`/todos/${itemId}`);
                 deleteResponse
                   .then(() => {
-                    updatedTodos();
+                    const getResponse = updatedTodos();
+                    getResponse
+                      .then(() => {
+                        setIsDeleting(false);
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
                   })
-                  .then(() => {
-                    setIsDeleting(false);
+                  .catch((error) => {
+                    console.log(error);
                   });
               }}
               className='trash-icon'
