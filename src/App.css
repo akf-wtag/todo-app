@@ -199,7 +199,7 @@ li {
 .todo-completed {
   text-decoration: line-through;
   text-decoration-color: red;
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: 1px;
   font-size: small;
   justify-self: start;
 }

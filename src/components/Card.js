@@ -1,13 +1,18 @@
-// import { useState } from 'react';
+import { useState } from 'react';
 import CardItem from './CardItem';
 import { v4 as uuid } from 'uuid';
 import Button from './Button';
+import del from '../api/delete'
+import get from '../api/get'
 
 const Card = ({ todos, searchText, updatedTodos }) => {
+  const [listDeleting, setListDeleting] = useState(false)
   return (
     <div className='card-container'>
       {todos.map((todo) => {
-        const title = Object.keys(todo)[0];
+        const properties = Object.keys(todo);
+        const title=properties[0];
+        const titleId=properties[1];
         let incompletedTodos = [];
         let completedTodos = [];
         todo[title].forEach((field) => {
@@ -30,17 +35,17 @@ const Card = ({ todos, searchText, updatedTodos }) => {
               />
               <div className='grid-title'>{title}</div>
               <Button
-                // onClick={() => {
-                //   setListDeleting(true);
-                //   const deleteResponse = deleteTodo(gridTitle, -1);
-                //   deleteResponse.then((response) => {
-                //     const getResponse = getTodos();
-                //     getResponse.then((response) => {
-                //       updatedTodos(response.data);
-                //       setListDeleting(false);
-                //     });
-                //   });
-                // }}
+                onClick={() => {
+                  setListDeleting(true);
+                  const deleteResponse = del(`/labels/${titleId}/todos`);
+                  // deleteResponse.then((response) => {
+                  //   const getResponse = get();
+                  //   getResponse.then((response) => {
+                  //     updatedTodos(response.data);
+                  //     setListDeleting(false);
+                  //   });
+                  // });
+                }}
                 btnName='Delete'
                 className='delete-list'
               />
