@@ -6,9 +6,9 @@ Enzyme.configure({ adapter: new Adapter() });
 
 test('Button calls onClick prop correctly', () => {
   const mockfn = jest.fn();
-  const wrapper = mount(<Button onClick={mockfn(1, 'ab', false, false)} />);
+  const wrapper = mount(<Button onClick={mockfn} />);
   wrapper.find('button').simulate('click');
-  expect(mockfn).toHaveBeenCalledWith(1, 'ab', false, false);
+  expect(mockfn).toHaveBeenCalled();
 });
 
 test('Button receives btnName prop correctly', () => {

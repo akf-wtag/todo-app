@@ -75,6 +75,22 @@ body {
   margin-top: 100px;
 }
 
+.no-todos {
+  width: 400px;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+  margin: 0 auto;
+  margin-top: 100px;
+  text-align: center;
+}
+
+.no-todos-container {
+  display: grid;
+  justify-items: center;
+  row-gap: 20px;
+}
+
 .add-loading {
   width: 24px;
   height: 24px;
@@ -237,4 +253,13 @@ li {
   cursor: pointer;
   height: 16px;
   width: 16px;
+}
+
+.add-new-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 7fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 10px;
 }

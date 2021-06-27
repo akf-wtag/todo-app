@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import Input from './Input';
+import PropTypes from 'prop-types';
 import { FaEdit, FaRegSave } from 'react-icons/fa';
 import { GoTrashcan } from 'react-icons/go';
 import { ImCancelCircle } from 'react-icons/im';
+import Input from './Input';
 import del from '../api/delete';
 import update from '../api/update';
 
@@ -134,6 +135,20 @@ const CardItem = ({ itemId, name, checked, updatedTodos }) => {
       )}
     </li>
   );
+};
+
+CardItem.defaultProps = {
+  itemId: null,
+  name: '',
+  checked: false,
+  updatedTodos: () => {},
+};
+
+CardItem.protoTypes = {
+  itemId: PropTypes.number,
+  name: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+  updatedTodos: PropTypes.func.isRequired,
 };
 
 export default CardItem;

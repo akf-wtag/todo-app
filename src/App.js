@@ -14,6 +14,7 @@ const App = () => {
   const [searchText, setSearchText] = useState('');
   const [loading, setLoading] = useState(false);
   const [postLoading, setPostLoading] = useState(false);
+  const [addTodo, setAddTodo] = useState(false);
 
   const getTodos = async () => {
     const getData = get('/db');
@@ -29,13 +30,36 @@ const App = () => {
               x.push(item);
             }
           });
-          y.push({ [label.name]: x });
+          y.push({ [label.name]: x, id: label.id });
         });
         setTodos(y);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const addNewTitileHandler = () => {
+    setPostLoading(true);
+    const postdata = post('/labels', {
+      id: uuid(),
+      name: title,
+    });
+    postdata
+      .then((response) => {
+        const getResponse = getTodos();
+        getResponse
+          .then((response) => {
+            setPostLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setTitle('');
   };
 
   useEffect(() => {
@@ -59,66 +83,70 @@ const App = () => {
       <div className='app-header'>
         <h1>To-Do app</h1>
       </div>
-      <div className='input-container'>
-        <div className='input-with-cross'>
-          <Input
-            type='text'
-            placeholder='Title'
-            name={title}
-            onChange={(e) => setTitle(e.target.value)}
-            onKeyPress={() => {}}
-            className='grid-title-input'
-          />
-          <ImCross className='cross-icon' onClick={() => setTitle('')} />
-        </div>
-        {postLoading ? (
-          <div className='add-loading'></div>
-        ) : (
+      {todos.length === 0 && !addTodo ? (
+        <div className='no-todos-container'>
+          <div className='no-todos'>No todos here</div>
           <Button
-            btnName='Add'
             className='add-btn'
+            btnName='Add a todo'
             onClick={() => {
-              setPostLoading(true);
-              const postdata = post('/labels', {
-                id: uuid(),
-                name: title,
-              });
-              postdata
-                .then((response) => {
-                  const getResponse = getTodos();
-                  getResponse
-                    .then((response) => {
-                      setPostLoading(false);
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-              setTitle('');
+              setAddTodo(true);
             }}
           />
-        )}
-        {todos.length > 0 ? (
-          <Input
-            type='text'
-            placeholder='search here...'
-            name={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className='search-input'
-          />
-        ) : (
-          ''
-        )}
-      </div>
+        </div>
+      ) : (
+        <>
+          <div className='input-container'>
+            <div className='input-with-cross'>
+              <Input
+                type='text'
+                placeholder='Title'
+                name={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onKeyPress={() => {
+                  addNewTitileHandler();
+                }}
+                className='grid-title-input'
+                focus={true}
+              />
+              <ImCross className='cross-icon' onClick={() => setTitle('')} />
+            </div>
+            {postLoading ? (
+              <div className='add-loading'></div>
+            ) : (
+              <Button
+                btnName='Add'
+                className='add-btn'
+                onClick={() => {
+                  addNewTitileHandler();
+                }}
+              />
+            )}
+            {todos.length > 0 ? (
+              <Input
+                type='text'
+                placeholder='search here...'
+                name={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                className='search-input'
+              />
+            ) : (
+              ''
+            )}
+          </div>
 
-      <Card
-        todos={todos}
-        searchText={searchText}
-        updatedTodos={() => getTodos()}
-      />
+          <div className='card-container'>
+            {todos.map((todo) => (
+              <Card
+                key={todo.id}
+                todo={todo}
+                searchText={searchText}
+                updatedTodos={() => getTodos()}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
