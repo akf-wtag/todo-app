@@ -141,7 +141,7 @@ const App = () => {
           <div className='card-container'>
             {todos.map((todo) => (
               <Card
-                key={Math.random() * 1000}
+                key={todo.id}
                 todo={todo}
                 searchText={searchText}
                 updatedTodos={() => getTodos()}

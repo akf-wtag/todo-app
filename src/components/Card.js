@@ -99,7 +99,7 @@ const Card = ({ todo, searchText, updatedTodos }) => {
           <ul>
             {incompletedTodos.map((item) => (
               <CardItem
-                key={Math.random() * 1000}
+                key={item.id}
                 itemId={item.id}
                 name={item.name}
                 checked={item.checked}
@@ -117,7 +117,7 @@ const Card = ({ todo, searchText, updatedTodos }) => {
           <ul>
             {completedTodos.map((item) => (
               <CardItem
-                key={Math.random() * 1000}
+                key={item.id}
                 itemId={item.id}
                 name={item.name}
                 checked={item.checked}
