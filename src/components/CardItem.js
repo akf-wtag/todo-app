@@ -138,14 +138,14 @@ const CardItem = ({ itemId, name, checked, updatedTodos }) => {
 };
 
 CardItem.defaultProps = {
-  itemId: null,
+  itemId: '',
   name: '',
   checked: false,
   updatedTodos: () => {},
 };
 
 CardItem.protoTypes = {
-  itemId: PropTypes.number,
+  itemId: PropTypes.string,
   name: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
   updatedTodos: PropTypes.func.isRequired,

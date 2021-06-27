@@ -4,8 +4,8 @@ import Card from '../components/Card';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const todo = { todoTitle: [{ name: 'ab', checked: false, id: 1 }], id: 2 };
-const incompletedTodos = [{ name: 'ab', checked: false, id: 1 }];
+const todo = { todoTitle: [{ name: 'ab', checked: false, id: 'a' }], id: 'b' };
+const incompletedTodos = [{ name: 'ab', checked: false, id: 'c' }];
 
 test('Card receives todo prop correctly', () => {
   const wrapper = mount(<Card todo={todo} />);

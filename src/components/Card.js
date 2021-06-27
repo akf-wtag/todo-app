@@ -8,6 +8,7 @@ import { FaRegSave } from 'react-icons/fa';
 import { ImCancelCircle } from 'react-icons/im';
 import del from '../api/delete';
 import post from '../api/post';
+// import uniqueRandom from 'unique-random';
 
 const Card = ({ todo, searchText, updatedTodos }) => {
   const [listDeleting, setListDeleting] = useState(false);
@@ -19,6 +20,9 @@ const Card = ({ todo, searchText, updatedTodos }) => {
   const titleId = todo[properties[1]];
   let incompletedTodos = [];
   let completedTodos = [];
+  // const incompleteRandom = uniqueRandom(1, incompletedTodos.length);
+  // const completeRandom = uniqueRandom(1, completedTodos.length);
+
   todo[title].forEach((field) => {
     if (
       searchText === '' ||
@@ -52,7 +56,7 @@ const Card = ({ todo, searchText, updatedTodos }) => {
   };
 
   return (
-    <div key={uuid()} className='ul-container'>
+    <div className='ul-container'>
       <div className='list-header'>
         <Button
           onClick={() => {
@@ -95,7 +99,7 @@ const Card = ({ todo, searchText, updatedTodos }) => {
           <ul>
             {incompletedTodos.map((item) => (
               <CardItem
-                key={item.id}
+                key={Math.random() * 1000}
                 itemId={item.id}
                 name={item.name}
                 checked={item.checked}
@@ -113,7 +117,7 @@ const Card = ({ todo, searchText, updatedTodos }) => {
           <ul>
             {completedTodos.map((item) => (
               <CardItem
-                key={item.id}
+                key={Math.random() * 1000}
                 itemId={item.id}
                 name={item.name}
                 checked={item.checked}
@@ -165,7 +169,7 @@ const Card = ({ todo, searchText, updatedTodos }) => {
 };
 
 Card.defaultProps = {
-  todo: { title: [{ name: '', checked: false, id: null }], id: null },
+  todo: { title: [{ name: '', checked: false, id: '' }], id: '' },
   searchText: '',
   updatedTodos: () => {},
 };
@@ -176,10 +180,10 @@ Card.propTypes = {
       PropTypes.shape({
         name: PropTypes.string,
         checked: PropTypes.bool,
-        id: PropTypes.number,
+        id: PropTypes.string,
       })
     ),
-    id: PropTypes.number,
+    id: PropTypes.string,
   }),
 
   searchText: PropTypes.string.isRequired,
