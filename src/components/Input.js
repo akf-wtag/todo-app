@@ -7,8 +7,8 @@ const Input = ({
   onChange,
   isChecked,
   focus,
-  onKeyPress,
   className,
+  onKeyPress,
 }) => {
   return (
     <>

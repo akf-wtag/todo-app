@@ -1,6 +1,6 @@
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import CardItem from '../components/CardItem';
+import Todo from '../components/Todo';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -14,12 +14,12 @@ Enzyme.configure({ adapter: new Adapter() });
 
 test('Card receives name prop correctly', () => {
   const wrapper = mount(
-    <CardItem name='ab' checked={false} isSaving={false} isEditing={false} />
+    <Todo name='ab' checked={false} isSaving={false} isEditing={false} />
   );
   expect(wrapper.find('.item-name').text()).toEqual('ab');
 });
 
 test('Card receives checked prop correctly', () => {
-  const wrapper = mount(<CardItem isChecking={false} checked={false} />);
+  const wrapper = mount(<Todo isChecking={false} checked={false} />);
   expect(wrapper.find('Input').props().isChecked).toBeFalsy();
 });

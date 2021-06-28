@@ -7,7 +7,6 @@ import './App.css';
 import get from './api/get';
 import post from './api/post';
 import { v4 as uuid } from 'uuid';
-// import uniqueRandom from 'unique-random';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
@@ -16,8 +15,6 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [postLoading, setPostLoading] = useState(false);
   const [addTodo, setAddTodo] = useState(false);
-
-  // const random = uniqueRandom(1, todos.length);
 
   const getTodos = async () => {
     const getData = get('/db');
@@ -106,11 +103,11 @@ const App = () => {
                 placeholder='Title'
                 name={title}
                 onChange={(e) => setTitle(e.target.value)}
+                focus={true}
+                className='grid-title-input'
                 onKeyPress={() => {
                   addNewTitileHandler();
                 }}
-                className='grid-title-input'
-                focus={true}
               />
               <ImCross className='cross-icon' onClick={() => setTitle('')} />
             </div>

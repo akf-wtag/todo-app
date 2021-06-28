@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
-import CardItem from './CardItem';
+import Todo from './Todo';
 import Button from './Button';
 import Input from './Input';
 import { FaRegSave } from 'react-icons/fa';
@@ -20,8 +20,6 @@ const Card = ({ todo, searchText, updatedTodos }) => {
   const titleId = todo[properties[1]];
   let incompletedTodos = [];
   let completedTodos = [];
-  // const incompleteRandom = uniqueRandom(1, incompletedTodos.length);
-  // const completeRandom = uniqueRandom(1, completedTodos.length);
 
   todo[title].forEach((field) => {
     if (
@@ -43,11 +41,12 @@ const Card = ({ todo, searchText, updatedTodos }) => {
     });
     postResponse
       .then((response) => {
-        updatedTodos();
+        updatedTodos().then(() => {
+          setNewItemSaving(false);
+        });
         setNewListName('');
       })
       .then((response) => {
-        setNewItemSaving(false);
         setListAdding(false);
       })
       .catch((error) => {
@@ -93,12 +92,13 @@ const Card = ({ todo, searchText, updatedTodos }) => {
           />
         )}
       </div>
+
       {incompletedTodos.length > 0 ? (
         <div className='list-container'>
           <div className='list-text'>Incomplete</div>
           <ul>
             {incompletedTodos.map((item) => (
-              <CardItem
+              <Todo
                 key={item.id}
                 itemId={item.id}
                 name={item.name}
@@ -116,7 +116,7 @@ const Card = ({ todo, searchText, updatedTodos }) => {
           <div className='list-text'>Complete</div>
           <ul>
             {completedTodos.map((item) => (
-              <CardItem
+              <Todo
                 key={item.id}
                 itemId={item.id}
                 name={item.name}
@@ -129,6 +129,7 @@ const Card = ({ todo, searchText, updatedTodos }) => {
       ) : (
         ''
       )}
+
       {listAdding ? (
         <div className='add-new-item'>
           {newItemSaving ? (
