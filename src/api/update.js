@@ -1,8 +1,13 @@
 import axios from './setup';
 
 const update = async (path, data) => {
-  const response = await axios.patch(path, data);
-  return response;
+  return await axios.patch(path, data, {
+    proxy: {
+      protocol: 'https',
+      host: '127.0.0.1',
+      port: 3001,
+    },
+  });
 };
 
 export default update;

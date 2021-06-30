@@ -2,55 +2,32 @@ import { useState, useEffect } from 'react';
 import { ImCross } from 'react-icons/im';
 import Input from './components/Input';
 import Button from './components/Button';
-import Card from './components/Card';
+import LabelCard from './components/LabelCard';
 import './App.css';
 import get from './api/get';
 import post from './api/post';
+import del from './api/delete';
+import update from './api/update';
 import { v4 as uuid } from 'uuid';
+import axios from 'axios';
 
 const App = () => {
+  const [labels, setLabels] = useState([]);
   const [todos, setTodos] = useState([]);
-  const [title, setTitle] = useState('');
+  const [titleInputText, setTitleInputText] = useState('');
   const [searchText, setSearchText] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [postLoading, setPostLoading] = useState(false);
-  const [addTodo, setAddTodo] = useState(false);
+  const [isPostingLabel, setIsPostingLabel] = useState(false);
+  const [isFetchingTodos, setIsFetchingTodos] = useState(false);
 
-  const getTodos = async () => {
-    const getData = get('/db');
-    return await getData
-      .then((response) => {
-        const getLabels = response.data.labels;
-        const getTodos = response.data.todos;
-        let y = [];
-        getLabels.forEach((label) => {
-          let x = [];
-          getTodos.forEach((item) => {
-            if (item.labelId === label.id) {
-              x.push(item);
-            }
-          });
-          y.push({ [label.name]: x, id: label.id });
-        });
-        setTodos(y);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const addNewTitileHandler = () => {
-    setPostLoading(true);
-    const postdata = post('/labels', {
-      id: uuid(),
-      name: title,
-    });
-    postdata
-      .then((response) => {
-        const getResponse = getTodos();
-        getResponse
+  useEffect(() => {
+    setIsFetchingTodos(true);
+    get('/labels')
+      .then((resp) => {
+        setLabels(resp.data);
+        get('/todos')
           .then((response) => {
-            setPostLoading(false);
+            setTodos(response.data);
+            setIsFetchingTodos(false);
           })
           .catch((error) => {
             console.log(error);
@@ -59,96 +36,234 @@ const App = () => {
       .catch((error) => {
         console.log(error);
       });
-    setTitle('');
+  }, []);
+
+  const postLabel = () => {
+    const uid = uuid();
+    if (titleInputText === '') console.log('Enter a title!');
+    else {
+      post('/labels', {
+        id: uid,
+        name: titleInputText,
+      }).then((response) => {
+        get(`/labels/${uid}`).then((response) => {
+          setLabels((prevLabels) => [...prevLabels, response.data]);
+          setIsPostingLabel(false);
+          setTitleInputText('');
+        });
+      });
+    }
   };
 
-  useEffect(() => {
-    setLoading(true);
-    const response = getTodos();
-    response
-      .then((response) => {
-        setLoading(false);
+  const postTodo = (labelId, todoName, callback) => {
+    const todoId = uuid();
+    post('/todos', {
+      id: todoId,
+      name: todoName,
+      checked: false,
+      labelId: labelId,
+    })
+      .then(() => {
+        get(`/todos/${todoId}`)
+          .then((response) => {
+            setTodos((prevTodos) => [...prevTodos, response.data]);
+            console.log(callback);
+            callback();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  };
 
-  if (loading) {
+  const checkUpdate = (todoId, checked) => {
+    update(`/todos/${todoId}`, {
+      checked: checked,
+    })
+      .then((response) => {
+        get(`/todos/${todoId}`)
+          .then((response) => {
+            setTodos((prevTodos) => {
+              return prevTodos.map((todo) => {
+                if (todo.id === todoId) return { ...todo, checked: checked };
+                return todo;
+              });
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteTodo = (todoId) => {
+    del(`/todos/${todoId}`)
+      .then(() => {
+        get(`/todos`)
+          .then(() => {
+            setTodos((prevTodos) =>
+              prevTodos.filter((todo) => todo.id !== todoId)
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const todoNameUpdate = (todoId, todoName, callback) => {
+    update(`/todos/${todoId}`, {
+      name: todoName,
+    }).then(() => {
+      get(`/todos/${todoId}`)
+        .then(() => {
+          setTodos((prevTodos) => {
+            return prevTodos.map((todo) => {
+              if (todo.id === todoId) return { ...todo, name: todoName };
+              return todo;
+            });
+          });
+          callback();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  };
+
+  const deleteCard = (labelId) => {
+    let deleteResponses = todos.filter((todo) => {
+      if (todo.labelId === labelId) return del(`/todos/${todo.id}`);
+    });
+
+    axios.all(deleteResponses).then((...values) => {
+      //   console.log(values);
+      // del(`/labels/${labelId}`).then((v) => {
+      //   get('/labels')
+      //     .then((resp) => {
+      //       setLabels(resp.data);
+      //       get('/todos')
+      //         .then((response) => {
+      //           setTodos(response.data);
+      //         })
+      //         .catch((error) => {
+      //           console.log(error);
+      //         });
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      // });
+
+      del(`/labels/${labelId}`).then(() => {
+        get('/labels').then((resp) => resp.data);
+      });
+      // const newLabels = get('/labels').then((resp) => resp.data);
+      // const newTodos = get('/todos').then((resp) => resp.data);
+      // setLabels(newLabels);
+      // setTodos(newTodos);
+    });
+
+    // del(`/labels/${labelId}`);
+    // get('/labels');
+  };
+
+  if (isFetchingTodos) {
     return <div className='fetch-todo-loader'>Fetching todos...</div>;
   }
 
   return (
-    <div>
-      <div className='app-header'>
-        <h1>To-Do app</h1>
-      </div>
-      {todos.length === 0 && !addTodo ? (
-        <div className='no-todos-container'>
-          <div className='no-todos'>No todos here</div>
-          <Button
-            className='add-btn'
-            btnName='Add a todo'
-            onClick={() => {
-              setAddTodo(true);
-            }}
+    <div className='app-container'>
+      <header className='app-header'>Todo App</header>
+      <form className='title-input-form'>
+        <div className='title-input-container'>
+          <Input
+            type='text'
+            placeholder='Title'
+            name={titleInputText}
+            onChange={(e) => setTitleInputText(e.target.value)}
+            focus={true}
+            className='title-input'
+          />
+          <ImCross
+            className='cross-icon'
+            onClick={() => setTitleInputText('')}
           />
         </div>
+        {isPostingLabel ? (
+          <div className='add-btn-loader'></div>
+        ) : (
+          <Button
+            type='submit'
+            btnName='Add'
+            className='add-title-btn'
+            onClick={(e) => {
+              e.preventDefault();
+              setIsPostingLabel(true);
+              postLabel();
+              setTitleInputText('');
+            }}
+          />
+        )}
+      </form>
+      {todos.length > 0 ? (
+        <Input
+          type='text'
+          placeholder='search here...'
+          name={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          className='search-input'
+        />
       ) : (
-        <>
-          <div className='input-container'>
-            <div className='input-with-cross'>
-              <Input
-                type='text'
-                placeholder='Title'
-                name={title}
-                onChange={(e) => setTitle(e.target.value)}
-                focus={true}
-                className='grid-title-input'
-                onKeyPress={() => {
-                  addNewTitileHandler();
-                }}
-              />
-              <ImCross className='cross-icon' onClick={() => setTitle('')} />
-            </div>
-            {postLoading ? (
-              <div className='add-loading'></div>
-            ) : (
-              <Button
-                btnName='Add'
-                className='add-btn'
-                onClick={() => {
-                  addNewTitileHandler();
-                }}
-              />
-            )}
-            {todos.length > 0 ? (
-              <Input
-                type='text'
-                placeholder='search here...'
-                name={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className='search-input'
-              />
-            ) : (
-              ''
-            )}
-          </div>
-
-          <div className='card-container'>
-            {todos.map((todo) => (
-              <Card
-                key={todo.id}
-                todo={todo}
-                searchText={searchText}
-                updatedTodos={() => getTodos()}
-              />
-            ))}
-          </div>
-        </>
+        ''
       )}
+      <div className='all-card-container'>
+        {labels.map((label) => (
+          <LabelCard
+            key={label.id}
+            labelId={label.id}
+            labelName={label.name}
+            todos={todos}
+            searchText={searchText}
+            postTodo={(id, name, callback) => postTodo(id, name, callback)}
+            checkUpdate={(id, checked) => checkUpdate(id, checked)}
+            deleteTodo={(id) => deleteTodo(id)}
+            todoNameUpdate={(id, name, callback) => {
+              todoNameUpdate(id, name, callback);
+            }}
+            deleteCard={(id) => deleteCard(id)}
+          />
+        ))}
+      </div>
     </div>
   );
 };
 
 export default App;
+
+// const isTitleExist = (titleInputText) => {
+//   let f = 0;
+//   const getLabelResponse = get(`/labels`);
+//   getLabelResponse.then((response) => {
+//     response.data.every((label) => {
+//       if (label.name === titleInputText) {
+//         console.log(label.name);
+//         f = 1;
+//         return false;
+//       }
+//     });
+//   });
+//   console.log(f);
+
+//   if (f) return true;
+//   return false;
+// };

@@ -36,6 +36,11 @@ test('Input receives focus prop correctly', () => {
   expect(wrapper.find('input').props().autoFocus).toBeFalsy;
 });
 
+test('Input receives className prop correctly', () => {
+  const wrapper = mount(<Input className='ab' />);
+  expect(wrapper.find('input').props().className).toEqual('ab');
+});
+
 test('Input receives onKeyPress prop correctly', () => {
   const mockfn = jest.fn();
   const wrapper = mount(<Input onKeyPress={mockfn} />);

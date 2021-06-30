@@ -37,6 +37,7 @@ Input.defaultProps = {
   onChange: () => {},
   isChecked: false,
   focus: false,
+  className: '',
   onKeyPress: () => {},
 };
 
@@ -47,6 +48,7 @@ Input.propTypes = {
   onChange: PropTypes.func.isRequired,
   isChecked: PropTypes.bool.isRequired,
   focus: PropTypes.bool.isRequired,
+  className: PropTypes.string.isRequired,
   onKeyPress: PropTypes.func.isRequired,
 };
 

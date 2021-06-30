@@ -1,8 +1,12 @@
 import axios from './setup';
 
-const del = async (path) => {
-  const response = await axios.delete(path);
-  return response;
-};
+const del = (path) =>
+  axios.delete(path, {
+    proxy: {
+      protocol: 'https',
+      host: '127.0.0.1',
+      port: 3001,
+    },
+  });
 
 export default del;

@@ -4,88 +4,64 @@ import { FaEdit, FaRegSave } from 'react-icons/fa';
 import { GoTrashcan } from 'react-icons/go';
 import { ImCancelCircle } from 'react-icons/im';
 import Input from './Input';
-import del from '../api/delete';
-import update from '../api/update';
 
-const CardItem = ({ itemId, name, checked, updatedTodos }) => {
-  const [newName, setNewName] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isChecking, setIsChecking] = useState(false);
+const Todo = ({
+  todoId,
+  todoName,
+  checked,
+  checkUpdate,
+  deleteTodo,
+  todoNameUpdate,
+}) => {
+  const [editedTodoName, setEditedTodoName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
-  const saveHandler = () => {
-    setIsEditing(false);
-    setIsSaving(true);
-    const updateResponse = update(`/todos/${itemId}`, {
-      name: newName,
-    });
-    updateResponse
-      .then((response) => {
-        const getResponse = updatedTodos();
-        getResponse
-          .then((response) => {
-            setIsSaving(false);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setNewName('');
-  };
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
 
   return (
     <li>
       {isChecking ? (
-        <div className='check-loading'></div>
-      ) : (
+        <div className='small-loader'></div>
+      ) : !isSaving ? (
         <Input
           type='checkbox'
           onChange={() => {
             setIsChecking(true);
-            const updateResponse = update(`/todos/${itemId}`, {
-              checked: !checked,
-            });
-            updateResponse
-              .then((response) => {
-                const getResponse = updatedTodos();
-                getResponse
-                  .then((response) => {
-                    setIsChecking(false);
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+            checkUpdate(todoId, !checked);
           }}
           isChecked={checked}
           className='checkbox'
         />
+      ) : (
+        ''
       )}
 
       {isEditing ? (
         <>
           <Input
             type='text'
-            name={newName}
-            onChange={(e) => setNewName(e.target.value)}
+            name={editedTodoName}
+            onChange={(e) => setEditedTodoName(e.target.value)}
             focus={true}
-            onKeyPress={saveHandler}
             className='edit-text-input'
           />
 
-          <FaRegSave onClick={saveHandler} className='save-icon' />
+          <FaRegSave
+            onClick={() => {
+              setIsSaving(true);
+              setIsEditing(false);
+              todoNameUpdate(todoId, editedTodoName, () => {
+                setIsSaving(false);
+              });
+            }}
+            className='save-icon'
+          />
 
           <ImCancelCircle
             onClick={() => {
               setIsEditing(false);
-              setNewName('');
+              setEditedTodoName('');
             }}
             className='cancel-icon'
           />
@@ -93,43 +69,32 @@ const CardItem = ({ itemId, name, checked, updatedTodos }) => {
       ) : (
         <>
           {isSaving ? (
-            <div className='check-loading'></div>
+            <div className='small-loader'></div>
           ) : (
-            <div className={checked ? 'todo-completed' : 'item-name'}>
-              {name}
-            </div>
-          )}
-          <FaEdit
-            className='edit-icon'
-            onClick={() => {
-              setIsEditing(true);
-              setNewName(name);
-            }}
-          />
-          {isDeleting ? (
-            <div className='check-loading'></div>
-          ) : (
-            <GoTrashcan
-              onClick={() => {
-                setIsDeleting(true);
-                const deleteResponse = del(`/todos/${itemId}`);
-                deleteResponse
-                  .then(() => {
-                    const getResponse = updatedTodos();
-                    getResponse
-                      .then(() => {
-                        setIsDeleting(false);
-                      })
-                      .catch((error) => {
-                        console.log(error);
-                      });
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-              }}
-              className='trash-icon'
-            />
+            <>
+              <div className={checked ? 'todo-completed' : 'item-name'}>
+                {todoName}
+              </div>
+
+              <FaEdit
+                className='edit-icon'
+                onClick={() => {
+                  setIsEditing(true);
+                  setEditedTodoName(todoName);
+                }}
+              />
+              {isDeleting ? (
+                <div className='small-loader'></div>
+              ) : (
+                <GoTrashcan
+                  onClick={() => {
+                    setIsDeleting(true);
+                    deleteTodo(todoId);
+                  }}
+                  className='trash-icon'
+                />
+              )}
+            </>
           )}
         </>
       )}
@@ -137,18 +102,22 @@ const CardItem = ({ itemId, name, checked, updatedTodos }) => {
   );
 };
 
-CardItem.defaultProps = {
-  itemId: '',
-  name: '',
+Todo.defaultProps = {
+  todoId: '',
+  todoName: '',
   checked: false,
-  updatedTodos: () => {},
+  checkUpdate: () => {},
+  deleteTodo: () => {},
+  todoNameUpdate: () => {},
 };
 
-CardItem.protoTypes = {
-  itemId: PropTypes.string,
-  name: PropTypes.string.isRequired,
+Todo.propTypes = {
+  todoId: PropTypes.string.isRequired,
+  todoName: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
-  updatedTodos: PropTypes.func.isRequired,
+  checkUpdate: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  todoNameUpdate: PropTypes.func.isRequired,
 };
 
-export default CardItem;
+export default Todo;

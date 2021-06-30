@@ -4,66 +4,12 @@ body {
   font-family: sans-serif;
 }
 
-.input-container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 15px;
-  align-items: center;
-  margin-bottom: 50px;
-}
-
-.input-with-cross {
-  background: white;
-  border-radius: 5px;
-}
-
-.app-header {
-  width: 200px;
-  height: 50px;
-  margin: 0 auto;
-  text-align: center;
-  color: white;
-  font-weight: bolder;
-  margin-bottom: 40px;
-}
-
-.grid-title-input,
-.search-input {
-  border: none;
-  padding: 5px 5px;
-  font-size: medium;
-  border-radius: 5px;
-  width: 238px;
-}
-
-.grid-title {
-  font-weight: bold;
-}
-
-.todo-text-input {
-  width: 215px;
-  border: none;
-  padding: 5px 5px;
-  font-size: medium;
-  border-radius: 5px;
-}
-
 ::placeholder {
   font-size: small;
 }
 
 :focus {
   outline: none;
-}
-
-.todo-text-input-container {
-  background: white;
-  border-radius: 5px;
-  display: grid;
-  grid-template-columns: 10fr 1fr;
-  align-items: center;
-  justify-items: center;
 }
 
 .fetch-todo-loader {
@@ -75,49 +21,42 @@ body {
   margin-top: 100px;
 }
 
-.no-todos {
-  width: 400px;
-  color: white;
-  font-size: large;
-  font-weight: bold;
-  margin: 0 auto;
-  margin-top: 100px;
+.app-container {
   text-align: center;
 }
 
-.no-todos-container {
-  display: grid;
-  justify-items: center;
-  row-gap: 20px;
+.app-header {
+  color: white;
+  font-weight: bolder;
+  font-size: xx-large;
+  margin-bottom: 40px;
+  margin-top: 40px;
 }
 
-.add-loading {
-  width: 24px;
-  height: 24px;
-  background-color: transparent;
-  border: 2px dotted white;
-  border-left-color: transparent;
-  border-radius: 50%;
-  animation: circle 2s ease-in 0s infinite;
+.title-input-container {
+  width: 250px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 5px;
 }
 
-.check-loading {
-  width: 13px;
+.title-input {
+  border: none;
+  padding: 5px 5px;
+  font-size: medium;
+  width: 220px;
+  border-radius: 5px;
+}
+
+.cross-icon {
+  color: red;
+  margin-right: 5px;
+  cursor: pointer;
   height: 13px;
-  background-color: transparent;
-  border: 2px dotted green;
-  border-left-color: transparent;
-  border-radius: 50%;
-  animation: circle 2s ease-in 0s infinite;
+  width: 13px;
 }
 
-@keyframes circle {
-  0% {
-    transform: rotate(-360deg);
-  }
-}
-
-.add-btn {
+.add-title-btn {
   border-radius: 5px;
   color: white;
   border: none;
@@ -126,33 +65,60 @@ body {
   font-size: medium;
   font-weight: 500;
   background-color: #20a729;
+  margin-top: 20px;
 }
 
-.checkbox {
-  cursor: pointer;
-  justify-self: center;
+.add-btn-loader {
+  width: 22px;
+  height: 22px;
+  background-color: transparent;
+  border: 2px dotted white;
+  border-left-color: transparent;
+  border-radius: 50%;
+  animation: circle 2s ease-in 0s infinite;
+  margin: 20px auto 0 auto;
 }
 
-.card-container {
+.search-input {
+  border: none;
+  padding: 5px 5px;
+  font-size: medium;
+  width: 240px;
+  border-radius: 5px;
+  margin-top: 30px;
+}
+
+.all-card-container {
   width: 900px;
-  margin: 0 auto;
+  margin: 30px auto 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   column-gap: 20px;
   row-gap: 20px;
 }
 
-.list-header {
+.single-card-container {
+  height: fit-content;
+  border-radius: 5px;
+  background: white;
+  display: grid;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  align-items: center;
+}
+
+.card-header {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   justify-content: space-evenly;
   justify-items: center;
-  margin-bottom: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
-.add-to-list,
-.delete-list {
+.add-to-card-btn,
+.delete-card-btn {
   border: none;
   background: none;
   font-weight: 500;
@@ -160,25 +126,19 @@ body {
   color: #20a729;
 }
 
-.delete-list {
+.add-to-card-btn {
+  margin-left: 5px;
+  justify-self: flex-start;
+}
+
+.delete-card-btn {
   color: red;
+  margin-right: 5px;
+  justify-self: flex-end;
 }
 
-.ul-container {
-  height: fit-content;
-  padding-top: 15px;
-  border-radius: 5px;
-  background: white;
-  display: grid;
-  grid-template-rows: 2fr auto;
-  /* row-gap: 15px; */
-  justify-items: start;
-}
-
-.list-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+.card-label {
+  font-weight: bold;
 }
 
 ul {
@@ -190,13 +150,6 @@ ul {
   gap: 10px;
 }
 
-.list-text {
-  font-size: small;
-  text-align: center;
-  border-bottom: 1px solid lightblue;
-  font-style: italic;
-}
-
 li {
   display: grid;
   grid-template-columns: 1fr 6fr 1fr 1fr;
@@ -204,12 +157,23 @@ li {
   align-items: center;
 }
 
-.edit-text-input {
-  border: none;
-  border-bottom: 1px solid green;
-  padding: 0;
-  font-size: small;
-  width: 190px;
+.checkbox {
+  cursor: pointer;
+}
+
+.edit-icon,
+.save-icon {
+  color: #28a745;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+}
+
+.cancel-icon {
+  color: red;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
 }
 
 .todo-completed {
@@ -225,21 +189,6 @@ li {
   font-size: small;
 }
 
-.cross-icon {
-  color: red;
-  margin-right: 5px;
-  cursor: pointer;
-  height: 13px;
-  width: 13px;
-}
-
-.cancel-icon {
-  color: red;
-  cursor: pointer;
-  height: 16px;
-  width: 16px;
-}
-
 .trash-icon {
   color: red;
   cursor: pointer;
@@ -247,12 +196,13 @@ li {
   width: 16px;
 }
 
-.edit-icon,
-.save-icon {
-  color: #28a745;
-  cursor: pointer;
-  height: 16px;
-  width: 16px;
+.edit-text-input {
+  border: none;
+  border-bottom: 1px solid green;
+  padding: 0;
+  font-size: small;
+  width: 190px;
+  margin-left: -2px;
 }
 
 .add-new-item {
@@ -263,3 +213,41 @@ li {
   align-items: center;
   margin-bottom: 10px;
 }
+
+.todo-title-text {
+  font-size: small;
+  border-bottom: 1px solid lightblue;
+  font-style: italic;
+}
+
+.small-loader {
+  width: 13px;
+  height: 13px;
+  background-color: transparent;
+  border: 2px dotted green;
+  border-left-color: transparent;
+  border-radius: 50%;
+  animation: circle 2s ease-in 0s infinite;
+}
+
+@keyframes circle {
+  0% {
+    transform: rotate(-360deg);
+  }
+}
+/* 
+.no-todos {
+  width: 400px;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+  margin: 0 auto;
+  margin-top: 100px;
+  text-align: center;
+}
+.no-todos-container {
+  display: grid;
+  justify-items: center;
+  row-gap: 20px;
+}
+ */

@@ -4,11 +4,9 @@ import Button from '../components/Button';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-test('Button calls onClick prop correctly', () => {
-  const mockfn = jest.fn();
-  const wrapper = mount(<Button onClick={mockfn} />);
-  wrapper.find('button').simulate('click');
-  expect(mockfn).toHaveBeenCalled();
+test('Button receives type prop correctly', () => {
+  const wrapper = mount(<Button type='ab' />);
+  expect(wrapper.find('button').props().type).toEqual('ab');
 });
 
 test('Button receives btnName prop correctly', () => {
@@ -19,4 +17,11 @@ test('Button receives btnName prop correctly', () => {
 test('Button receives className prop correctly', () => {
   const wrapper = mount(<Button className='ab' />);
   expect(wrapper.find('button').props().className).toEqual('ab');
+});
+
+test('Button calls onClick prop correctly', () => {
+  const mockfn = jest.fn();
+  const wrapper = mount(<Button onClick={mockfn} />);
+  wrapper.find('button').simulate('click');
+  expect(mockfn).toHaveBeenCalled();
 });
