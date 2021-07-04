@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { FaEdit, FaRegSave } from 'react-icons/fa';
 import { GoTrashcan } from 'react-icons/go';
 import { ImCancelCircle } from 'react-icons/im';
-import Input from './Input';
 
 const Todo = ({
   todoId,
@@ -22,16 +21,15 @@ const Todo = ({
   return (
     <li>
       {isChecking ? (
-        <div className='small-loader'></div>
+        <div></div>
       ) : !isSaving ? (
-        <Input
+        <input
           type='checkbox'
+          checked={checked}
           onChange={() => {
             setIsChecking(true);
             checkUpdate(todoId, !checked);
           }}
-          isChecked={checked}
-          className='checkbox'
         />
       ) : (
         ''
@@ -39,14 +37,11 @@ const Todo = ({
 
       {isEditing ? (
         <>
-          <Input
-            type='text'
-            name={editedTodoName}
+          <input
+            value={editedTodoName}
+            autoFocus={true}
             onChange={(e) => setEditedTodoName(e.target.value)}
-            focus={true}
-            className='edit-text-input'
           />
-
           <FaRegSave
             onClick={() => {
               setIsSaving(true);
@@ -55,43 +50,37 @@ const Todo = ({
                 setIsSaving(false);
               });
             }}
-            className='save-icon'
           />
-
           <ImCancelCircle
             onClick={() => {
               setIsEditing(false);
               setEditedTodoName('');
             }}
-            className='cancel-icon'
           />
         </>
       ) : (
         <>
           {isSaving ? (
-            <div className='small-loader'></div>
+            <div></div>
           ) : (
             <>
-              <div className={checked ? 'todo-completed' : 'item-name'}>
-                {todoName}
-              </div>
+              <div>{todoName}</div>
 
               <FaEdit
-                className='edit-icon'
                 onClick={() => {
                   setIsEditing(true);
                   setEditedTodoName(todoName);
                 }}
               />
+
               {isDeleting ? (
-                <div className='small-loader'></div>
+                <div></div>
               ) : (
                 <GoTrashcan
                   onClick={() => {
                     setIsDeleting(true);
                     deleteTodo(todoId);
                   }}
-                  className='trash-icon'
                 />
               )}
             </>

@@ -1,7 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ImCross } from 'react-icons/im';
-import Input from './components/Input';
-import Button from './components/Button';
 import LabelCard from './components/LabelCard';
 import './App.css';
 import get from './api/get';
@@ -9,7 +6,7 @@ import post from './api/post';
 import del from './api/delete';
 import update from './api/update';
 import { v4 as uuid } from 'uuid';
-import axios from 'axios';
+import { ImCross } from 'react-icons/im';
 
 const App = () => {
   const [labels, setLabels] = useState([]);
@@ -67,7 +64,6 @@ const App = () => {
         get(`/todos/${todoId}`)
           .then((response) => {
             setTodos((prevTodos) => [...prevTodos, response.data]);
-            console.log(callback);
             callback();
           })
           .catch((error) => {
@@ -140,110 +136,93 @@ const App = () => {
     });
   };
 
-  const deleteCard = (labelId) => {
+  const deleteCard = (labelId, callback) => {
     let deleteResponses = todos.filter((todo) => {
       if (todo.labelId === labelId) return del(`/todos/${todo.id}`);
     });
 
-    axios.all(deleteResponses).then((...values) => {
-      //   console.log(values);
-      // del(`/labels/${labelId}`).then((v) => {
-      //   get('/labels')
-      //     .then((resp) => {
-      //       setLabels(resp.data);
-      //       get('/todos')
-      //         .then((response) => {
-      //           setTodos(response.data);
-      //         })
-      //         .catch((error) => {
-      //           console.log(error);
-      //         });
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //     });
-      // });
-
+    Promise.all(deleteResponses).then(() => {
       del(`/labels/${labelId}`).then(() => {
-        get('/labels').then((resp) => resp.data);
+        get('http://localhost:3001/labels')
+          .then((response) => {
+            setLabels(response.data);
+          })
+          .then(() => {
+            get('http://localhost:3001/todos').then((response) => {
+              setTodos(response.data);
+              callback();
+            });
+          });
       });
-      // const newLabels = get('/labels').then((resp) => resp.data);
-      // const newTodos = get('/todos').then((resp) => resp.data);
-      // setLabels(newLabels);
-      // setTodos(newTodos);
     });
-
-    // del(`/labels/${labelId}`);
-    // get('/labels');
   };
 
   if (isFetchingTodos) {
-    return <div className='fetch-todo-loader'>Fetching todos...</div>;
+    return <div>Fetching todos...</div>;
   }
 
   return (
-    <div className='app-container'>
-      <header className='app-header'>Todo App</header>
-      <form className='title-input-form'>
-        <div className='title-input-container'>
-          <Input
-            type='text'
+    <div>
+      <div>Todo App</div>
+      <div>
+        <div>
+          <input
             placeholder='Title'
-            name={titleInputText}
+            value={titleInputText}
+            autoFocus={true}
             onChange={(e) => setTitleInputText(e.target.value)}
-            focus={true}
-            className='title-input'
           />
-          <ImCross
-            className='cross-icon'
-            onClick={() => setTitleInputText('')}
-          />
+
+          <ImCross onClick={() => setTitleInputText('')} />
+          {isPostingLabel ? (
+            <div></div>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setIsPostingLabel(true);
+                postLabel();
+                setTitleInputText('');
+              }}
+            >
+              Add
+            </button>
+          )}
         </div>
-        {isPostingLabel ? (
-          <div className='add-btn-loader'></div>
-        ) : (
-          <Button
-            type='submit'
-            btnName='Add'
-            className='add-title-btn'
-            onClick={(e) => {
-              e.preventDefault();
-              setIsPostingLabel(true);
-              postLabel();
-              setTitleInputText('');
-            }}
-          />
-        )}
-      </form>
-      {todos.length > 0 ? (
-        <Input
-          type='text'
-          placeholder='search here...'
-          name={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          className='search-input'
-        />
-      ) : (
-        ''
-      )}
-      <div className='all-card-container'>
-        {labels.map((label) => (
-          <LabelCard
-            key={label.id}
-            labelId={label.id}
-            labelName={label.name}
-            todos={todos}
-            searchText={searchText}
-            postTodo={(id, name, callback) => postTodo(id, name, callback)}
-            checkUpdate={(id, checked) => checkUpdate(id, checked)}
-            deleteTodo={(id) => deleteTodo(id)}
-            todoNameUpdate={(id, name, callback) => {
-              todoNameUpdate(id, name, callback);
-            }}
-            deleteCard={(id) => deleteCard(id)}
-          />
-        ))}
+        <div>
+          {todos.length > 0 ? (
+            <input
+              placeholder='Search'
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          ) : (
+            ''
+          )}
+        </div>
       </div>
+      {labels.length > 0 ? (
+        <div>
+          {labels.map((label) => (
+            <LabelCard
+              key={label.id}
+              labelId={label.id}
+              labelName={label.name}
+              todos={todos}
+              searchText={searchText}
+              postTodo={(id, name, callback) => postTodo(id, name, callback)}
+              checkUpdate={(id, checked) => checkUpdate(id, checked)}
+              deleteTodo={(id) => deleteTodo(id)}
+              todoNameUpdate={(id, name, callback) => {
+                todoNameUpdate(id, name, callback);
+              }}
+              deleteCard={(id, callback) => deleteCard(id, callback)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div>No todos...</div>
+      )}
     </div>
   );
 };

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Todo from './Todo';
-import Button from './Button';
-import Input from './Input';
 import { FaRegSave } from 'react-icons/fa';
 import { ImCancelCircle } from 'react-icons/im';
 
@@ -20,6 +18,7 @@ const Labelcard = ({
   const [isAddingTodo, setIsAddingTodo] = useState(false);
   const [isPostingTodo, setIsPostingTodo] = useState(false);
   const [newTodoName, setNewTodoName] = useState('');
+  const [isDeletingCard, setIsDeletingCard] = useState(false);
 
   let incompleteTodos = [];
   let completeTodos = [];
@@ -37,122 +36,121 @@ const Labelcard = ({
   });
 
   return (
-    <>
-      <div key={labelId} className='single-card-container'>
-        <div className='card-header'>
-          <Button
-            type='button'
-            btnName='Add'
-            className='add-to-card-btn'
-            onClick={() => {
-              setIsAddingTodo(true);
-            }}
-          />
-          <div className='card-label'>{labelName}</div>
-          <Button
-            type='button'
-            btnName='Delete'
-            className='delete-card-btn'
-            onClick={() => {
-              deleteCard(labelId);
-            }}
-          />
-        </div>
-
-        {incompleteTodos.length > 0 ? (
-          <>
-            <div className='todo-title-text'>Incomplete</div>
-            <ul>
-              {incompleteTodos.map((todo) => {
-                return (
-                  <Todo
-                    key={todo.id}
-                    todoId={todo.id}
-                    todoName={todo.name}
-                    checked={todo.checked}
-                    checkUpdate={(todoId, checked) =>
-                      checkUpdate(todoId, checked)
-                    }
-                    deleteTodo={(todoId) => deleteTodo(todoId)}
-                    todoNameUpdate={(todoId, todoName, callback) =>
-                      todoNameUpdate(todoId, todoName, callback)
-                    }
-                  />
-                );
-              })}
-            </ul>
-          </>
-        ) : (
-          ''
-        )}
-
-        {completeTodos.length > 0 ? (
-          <>
-            <div className='todo-title-text'>Complete</div>
-            <ul>
-              {completeTodos.map((todo) => {
-                return (
-                  <Todo
-                    key={todo.id}
-                    todoId={todo.id}
-                    todoName={todo.name}
-                    checked={todo.checked}
-                    checkUpdate={(todoId, checked) =>
-                      checkUpdate(todoId, checked)
-                    }
-                    deleteTodo={(todoId) => deleteTodo(todoId)}
-                    todoNameUpdate={(todoId, todoName, callback) =>
-                      todoNameUpdate(todoId, todoName, callback)
-                    }
-                  />
-                );
-              })}
-            </ul>
-          </>
-        ) : (
-          ''
-        )}
-
-        {isAddingTodo ? (
-          <div className='add-new-item'>
-            {isPostingTodo ? (
-              <div className='small-loader'></div>
-            ) : (
+    <div>
+      {isDeletingCard ? (
+        <div></div>
+      ) : (
+        <div>
+          <div>
+            <div>{labelName}</div>
+            {incompleteTodos.length > 0 ? (
               <>
-                <Input
-                  type='text'
-                  name={newTodoName}
-                  onChange={(e) => setNewTodoName(e.target.value)}
-                  focus={true}
-                  className='edit-text-input'
-                />
-                <FaRegSave
-                  onClick={() => {
-                    setIsPostingTodo(true);
-                    postTodo(labelId, newTodoName, () => {
-                      setIsPostingTodo(false);
-                      setIsAddingTodo(false);
-                    });
-                    setNewTodoName('');
-                  }}
-                  className='save-icon'
-                />
-
-                <ImCancelCircle
-                  onClick={() => {
-                    setIsAddingTodo(false);
-                    setNewTodoName('');
-                  }}
-                  className='cancel-icon'
-                />
+                <div>Incomplete</div>
+                <ul>
+                  {incompleteTodos.map((todo) => {
+                    return (
+                      <Todo
+                        key={todo.id}
+                        todoId={todo.id}
+                        todoName={todo.name}
+                        checked={todo.checked}
+                        checkUpdate={(todoId, checked) =>
+                          checkUpdate(todoId, checked)
+                        }
+                        deleteTodo={(todoId) => deleteTodo(todoId)}
+                        todoNameUpdate={(todoId, todoName, callback) =>
+                          todoNameUpdate(todoId, todoName, callback)
+                        }
+                      />
+                    );
+                  })}
+                </ul>
               </>
+            ) : (
+              ''
             )}
+            {completeTodos.length > 0 ? (
+              <>
+                <div>Complete</div>
+                <ul>
+                  {completeTodos.map((todo) => {
+                    return (
+                      <Todo
+                        key={todo.id}
+                        todoId={todo.id}
+                        todoName={todo.name}
+                        checked={todo.checked}
+                        checkUpdate={(todoId, checked) =>
+                          checkUpdate(todoId, checked)
+                        }
+                        deleteTodo={(todoId) => deleteTodo(todoId)}
+                        todoNameUpdate={(todoId, todoName, callback) =>
+                          todoNameUpdate(todoId, todoName, callback)
+                        }
+                      />
+                    );
+                  })}
+                </ul>
+              </>
+            ) : (
+              ''
+            )}
+
+            <div>
+              <div>
+                {isAddingTodo && isPostingTodo ? (
+                  <div></div>
+                ) : !isPostingTodo && !isAddingTodo ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        setIsAddingTodo(true);
+                      }}
+                    >
+                      Add
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsDeletingCard(true);
+                        deleteCard(labelId, () => {
+                          setIsDeletingCard(false);
+                        });
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </>
+                ) : (
+                  <div>
+                    <input
+                      value={newTodoName}
+                      autoFocus={true}
+                      onChange={(e) => setNewTodoName(e.target.value)}
+                    />
+                    <FaRegSave
+                      onClick={() => {
+                        setIsPostingTodo(true);
+                        postTodo(labelId, newTodoName, () => {
+                          setIsPostingTodo(false);
+                          setIsAddingTodo(false);
+                        });
+                        setNewTodoName('');
+                      }}
+                    />
+                    <ImCancelCircle
+                      onClick={() => {
+                        setIsAddingTodo(false);
+                        setNewTodoName('');
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        ) : (
-          ''
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 };
 
