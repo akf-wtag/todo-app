@@ -21,7 +21,7 @@ const Todo = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
-  console.log(todoId);
+  // console.log(todoId);
 
   return (
     <li>

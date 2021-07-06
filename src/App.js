@@ -170,24 +170,15 @@ const App = () => {
     <div>
       <div className='app-header'>Todo App</div>
       <div className='input-container'>
-        <div className='label-input-container'>
-          <Input
-            size='tiny'
-            label='Add a title'
-            placeholder='Title'
-            required={true}
-            value={titleInputText}
-            autoFocus={true}
-            onChange={(e) => setTitleInputText(e)}
-          />
-
-          <IconButton
-            className='clear-icon-btn'
-            icon={<Icon name='close' />}
-            size='tiny'
-            onClick={() => setTitleInputText('')}
-          />
-        </div>
+        <Input
+          size='tiny'
+          label='Add a title'
+          placeholder='Title'
+          required={true}
+          value={titleInputText}
+          autoFocus={true}
+          onChange={(e) => setTitleInputText(e)}
+        />
 
         {isPostingLabel ? (
           <Spinner color='success' bgColor='neutral' size='tiny' />
