@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FaEdit, FaRegSave } from 'react-icons/fa';
-import { GoTrashcan } from 'react-icons/go';
-import { ImCancelCircle } from 'react-icons/im';
+import { FaRegSave } from 'react-icons/fa';
+import Input from '@wtag/rcl-input';
+import Icon from '@wtag/rcl-icon';
+import IconButton from '@wtag/rcl-icon-button';
+import { CheckBox } from '@wtag/react-comp-lib';
+import { Spinner } from '@wtag/react-comp-lib';
+import { v4 as uuid } from 'uuid';
 
 const Todo = ({
   todoId,
@@ -17,18 +21,23 @@ const Todo = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
+  console.log(todoId);
 
   return (
     <li>
       {isChecking ? (
-        <div></div>
-      ) : !isSaving ? (
-        <input
-          type='checkbox'
+        <Spinner color='success' bgColor='neutral' size='tiny' />
+      ) : !isSaving && !isEditing ? (
+        <CheckBox
+          className='todo-check'
+          name={uuid()}
+          label={todoName}
           checked={checked}
+          size='small'
           onChange={() => {
             setIsChecking(true);
             checkUpdate(todoId, !checked);
+            // console.log(todoId);
           }}
         />
       ) : (
@@ -37,12 +46,19 @@ const Todo = ({
 
       {isEditing ? (
         <>
-          <input
+          <Input
+            size='tiny'
             value={editedTodoName}
             autoFocus={true}
-            onChange={(e) => setEditedTodoName(e.target.value)}
+            isClearable={false}
+            onChange={(e) => setEditedTodoName(e)}
           />
-          <FaRegSave
+
+          <IconButton
+            className='save-icon-btn'
+            icon={<FaRegSave />}
+            size='tiny'
+            color='success'
             onClick={() => {
               setIsSaving(true);
               setIsEditing(false);
@@ -51,7 +67,12 @@ const Todo = ({
               });
             }}
           />
-          <ImCancelCircle
+
+          <IconButton
+            className='close-icon-btn'
+            icon={<Icon name='close' />}
+            size='tiny'
+            color='danger'
             onClick={() => {
               setIsEditing(false);
               setEditedTodoName('');
@@ -61,12 +82,14 @@ const Todo = ({
       ) : (
         <>
           {isSaving ? (
-            <div></div>
+            <Spinner color='success' bgColor='neutral' size='tiny' />
           ) : (
             <>
-              <div>{todoName}</div>
-
-              <FaEdit
+              <IconButton
+                className='edit-icon-btn'
+                icon={<Icon name='edit' />}
+                color={'success'}
+                size='tiny'
                 onClick={() => {
                   setIsEditing(true);
                   setEditedTodoName(todoName);
@@ -74,9 +97,13 @@ const Todo = ({
               />
 
               {isDeleting ? (
-                <div></div>
+                <Spinner color='success' bgColor='neutral' size='tiny' />
               ) : (
-                <GoTrashcan
+                <IconButton
+                  className='delete-icon-btn'
+                  icon={<Icon name='delete' />}
+                  size='tiny'
+                  color={'danger'}
                   onClick={() => {
                     setIsDeleting(true);
                     deleteTodo(todoId);

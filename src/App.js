@@ -6,7 +6,11 @@ import post from './api/post';
 import del from './api/delete';
 import update from './api/update';
 import { v4 as uuid } from 'uuid';
-import { ImCross } from 'react-icons/im';
+import Input from '@wtag/rcl-input';
+import Button from '@wtag/rcl-button';
+import Icon from '@wtag/rcl-icon';
+import IconButton from '@wtag/rcl-icon-button';
+import { Spinner } from '@wtag/react-comp-lib';
 
 const App = () => {
   const [labels, setLabels] = useState([]);
@@ -76,6 +80,7 @@ const App = () => {
   };
 
   const checkUpdate = (todoId, checked) => {
+    // console.log(todoId);
     update(`/todos/${todoId}`, {
       checked: checked,
     })
@@ -158,43 +163,59 @@ const App = () => {
   };
 
   if (isFetchingTodos) {
-    return <div>Fetching todos...</div>;
+    return <div className='fetch-todo-loader'>Fetching todos...</div>;
   }
 
   return (
     <div>
-      <div>Todo App</div>
-      <div>
-        <div>
-          <input
+      <div className='app-header'>Todo App</div>
+      <div className='input-container'>
+        <div className='label-input-container'>
+          <Input
+            size='tiny'
+            label='Add a title'
             placeholder='Title'
+            required={true}
             value={titleInputText}
             autoFocus={true}
-            onChange={(e) => setTitleInputText(e.target.value)}
+            onChange={(e) => setTitleInputText(e)}
           />
 
-          <ImCross onClick={() => setTitleInputText('')} />
-          {isPostingLabel ? (
-            <div></div>
-          ) : (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setIsPostingLabel(true);
-                postLabel();
-                setTitleInputText('');
-              }}
-            >
-              Add
-            </button>
-          )}
+          <IconButton
+            className='clear-icon-btn'
+            icon={<Icon name='close' />}
+            size='tiny'
+            onClick={() => setTitleInputText('')}
+          />
         </div>
-        <div>
+
+        {isPostingLabel ? (
+          <Spinner color='success' bgColor='neutral' size='tiny' />
+        ) : (
+          <Button
+            icon={<Icon name='add' fill='#fff' />}
+            version='v2'
+            type='success'
+            label='Add'
+            size='tiny'
+            onClick={(e) => {
+              e.preventDefault();
+              setIsPostingLabel(true);
+              postLabel();
+              setTitleInputText('');
+            }}
+            className='add-btn'
+          />
+        )}
+        <div className='search-input'>
           {todos.length > 0 ? (
-            <input
+            <Input
+              size='tiny'
+              label='Search'
               placeholder='Search'
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e) => setSearchText(e)}
+              postIcon={<Icon name='search' />}
             />
           ) : (
             ''
@@ -202,7 +223,7 @@ const App = () => {
         </div>
       </div>
       {labels.length > 0 ? (
-        <div>
+        <div className='cards-container'>
           {labels.map((label) => (
             <LabelCard
               key={label.id}
@@ -221,7 +242,7 @@ const App = () => {
           ))}
         </div>
       ) : (
-        <div>No todos...</div>
+        <div className='no-todos'>No todos...</div>
       )}
     </div>
   );
