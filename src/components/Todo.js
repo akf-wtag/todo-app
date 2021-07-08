@@ -21,7 +21,6 @@ const Todo = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
-  // console.log(todoId);
 
   return (
     <li>
@@ -37,7 +36,6 @@ const Todo = ({
           onChange={() => {
             setIsChecking(true);
             checkUpdate(todoId, !checked);
-            // console.log(todoId);
           }}
         />
       ) : (
@@ -88,7 +86,7 @@ const Todo = ({
               <IconButton
                 className='edit-icon-btn'
                 icon={<Icon name='edit' />}
-                color={'success'}
+                color='success'
                 size='tiny'
                 onClick={() => {
                   setIsEditing(true);
@@ -103,7 +101,7 @@ const Todo = ({
                   className='delete-icon-btn'
                   icon={<Icon name='delete' />}
                   size='tiny'
-                  color={'danger'}
+                  color='danger'
                   onClick={() => {
                     setIsDeleting(true);
                     deleteTodo(todoId);

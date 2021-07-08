@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import LabelCard from './components/LabelCard';
-import './App.css';
+import './App.scss';
 import get from './api/get';
 import post from './api/post';
 import del from './api/delete';
@@ -9,7 +9,6 @@ import { v4 as uuid } from 'uuid';
 import Input from '@wtag/rcl-input';
 import Button from '@wtag/rcl-button';
 import Icon from '@wtag/rcl-icon';
-import IconButton from '@wtag/rcl-icon-button';
 import { Spinner } from '@wtag/react-comp-lib';
 
 const App = () => {
@@ -80,7 +79,6 @@ const App = () => {
   };
 
   const checkUpdate = (todoId, checked) => {
-    // console.log(todoId);
     update(`/todos/${todoId}`, {
       checked: checked,
     })
@@ -167,7 +165,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className='app-container'>
       <div className='app-header'>Todo App</div>
       <div className='input-container'>
         <Input
@@ -240,21 +238,3 @@ const App = () => {
 };
 
 export default App;
-
-// const isTitleExist = (titleInputText) => {
-//   let f = 0;
-//   const getLabelResponse = get(`/labels`);
-//   getLabelResponse.then((response) => {
-//     response.data.every((label) => {
-//       if (label.name === titleInputText) {
-//         console.log(label.name);
-//         f = 1;
-//         return false;
-//       }
-//     });
-//   });
-//   console.log(f);
-
-//   if (f) return true;
-//   return false;
-// };

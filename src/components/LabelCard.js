@@ -53,11 +53,10 @@ const Labelcard = ({
       ) : (
         <>
           {incompleteTodos.length > 0 ? (
-            <div>
+            <>
               <div className='todo-title-text'>Incomplete</div>
               <ul>
                 {incompleteTodos.map((todo) => {
-                  // console.log(todo.id);
                   return (
                     <Todo
                       key={todo.id}
@@ -75,20 +74,19 @@ const Labelcard = ({
                   );
                 })}
               </ul>
-            </div>
+            </>
           ) : (
             ''
           )}
 
           {completeTodos.length > 0 ? (
-            <div>
+            <>
               <div className='todo-title-text'>Complete</div>
               <ul>
                 {completeTodos.map((todo) => {
-                  // console.log(100);
-
                   return (
                     <Todo
+                      className='todo'
                       key={todo.id}
                       todoId={todo.id}
                       todoName={todo.name}
@@ -104,17 +102,18 @@ const Labelcard = ({
                   );
                 })}
               </ul>
-            </div>
+            </>
           ) : (
             ''
           )}
 
-          <div>
+          <>
             {isAddingTodo && isPostingTodo ? (
               <Spinner color='success' bgColor='neutral' size='tiny' />
             ) : !isPostingTodo && !isAddingTodo ? (
               <div className='card-btns'>
                 <Button
+                  className='todo-add-btn'
                   version='v2'
                   type='success'
                   size='tiny'
@@ -150,6 +149,7 @@ const Labelcard = ({
                   className='save-icon-btn'
                   icon={<FaRegSave />}
                   size='tiny'
+                  color='success'
                   onClick={() => {
                     setIsPostingTodo(true);
                     postTodo(labelId, newTodoName, () => {
@@ -162,6 +162,7 @@ const Labelcard = ({
                 <IconButton
                   className='close-icon-btn'
                   icon={<Icon name='close' />}
+                  color='danger'
                   size='tiny'
                   onClick={() => {
                     setIsAddingTodo(false);
@@ -170,7 +171,7 @@ const Labelcard = ({
                 />
               </div>
             )}
-          </div>
+          </>
         </>
       )}
     </Card>

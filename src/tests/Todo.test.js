@@ -1,25 +1,41 @@
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Todo from '../components/Todo';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-// const todo = { todoTitle: [{ name: 'ab', checked: false, id: '1' }], id: '2' };
-// const incompletedTodos = [{ name: 'ab', checked: false, id: '1' }];
-
-// test('Card receives itemId prop correctly', () => {
-//   const wrapper = mount(<CardItem itemId={1} />);
-//   expect(wrapper.find('').).toEqual('');
-// });
-
-test('Card receives name prop correctly', () => {
-  const wrapper = mount(
-    <Todo name='ab' checked={false} isSaving={false} isEditing={false} />
-  );
-  expect(wrapper.find('.item-name').text()).toEqual('ab');
+test('Todo receives todoName prop correctly', () => {
+  const wrapper = shallow(<Todo todoName='ab' />);
+  expect(wrapper.find('.todo-check').props().label).toEqual('ab');
 });
 
-test('Card receives checked prop correctly', () => {
-  const wrapper = mount(<Todo isChecking={false} checked={false} />);
-  expect(wrapper.find('Input').props().isChecked).toBeFalsy();
+test('Todo receives checked prop correctly', () => {
+  const wrapper = shallow(<Todo checked={false} />);
+  expect(wrapper.find('.todo-check').props().isChecked).toBeFalsy();
+});
+
+test('Todo receives checkUpdate prop correctly', () => {
+  const a = (todoId, checked) => {};
+  const b = (fn) => fn('2', false);
+  const mockfn = jest.fn(a);
+  b(mockfn);
+  const wrapper = shallow(<Todo checkUpdate={mockfn} />);
+  wrapper.find('.todo-check').simulate('change');
+  expect(mockfn).toHaveBeenCalledWith('2', false);
+});
+
+test('Todo receives deleteTodo prop correctly', () => {
+  const mockfn = jest.fn((todoId) => {});
+  const wrapper = shallow(<Todo deleteTodo={mockfn('2')} />);
+  wrapper.find('.delete-icon-btn').simulate('click');
+  expect(mockfn).toHaveBeenCalledWith('2');
+});
+
+test('Todo receives todoNameUpdate prop correctly', () => {
+  const fn = () => {};
+  const mockfn = jest.fn((todoId, editedTodoName, fn) => {});
+  const wrapper = shallow(<Todo todoNameUpdate={mockfn('2', 'ab', fn)} />);
+  wrapper.find('.edit-icon-btn').simulate('click');
+  wrapper.find('.save-icon-btn').simulate('click');
+  expect(mockfn).toHaveBeenCalledWith('2', 'ab', fn);
 });

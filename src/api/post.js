@@ -1,7 +1,5 @@
 import axios from './setup';
 
-const post = (path, data) => {
-  return axios.post(path, data);
-};
+const post = (path, data) => axios.post(path, data);
 
 export default post;
